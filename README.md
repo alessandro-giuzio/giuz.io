@@ -2,7 +2,7 @@
 
 Personal site of Alessandro Giuzio: front-end developer and technical partner for agencies and studios.
 
-Static [Astro 7](https://astro.build) site, styled with Tailwind CSS v4, deployed on Cloudflare Pages.
+Static [Astro 7](https://astro.build) site, styled with Tailwind CSS v4, deployed on Cloudflare Workers (static assets).
 
 ## Run it
 
@@ -26,7 +26,8 @@ Node 22.12 or newer (see `.node-version`).
 | `src/content/proyectos/` | Case studies, one Markdown file each. |
 | `src/content/notas/` | Technical notes (blog), one Markdown file each. |
 | `src/content.config.ts` | Frontmatter schemas for both collections. |
-| `public/_headers` | Security and cache headers for Cloudflare Pages. |
+| `public/_headers` | Security and cache headers. |
+| `wrangler.jsonc` | Cloudflare deploy config. |
 
 Entries with `draft: true` are not built. Unwritten sections show a dashed "Contenido pendiente" box; search for `<Pending` to find them all.
 
@@ -37,15 +38,20 @@ Entries with `draft: true` are not built. Unwritten sections show a dashed "Cont
 - `sitemap-index.xml`, `robots.txt` and `llms.txt` are generated at build time.
 - Legal pages are `noindex` and excluded from the sitemap.
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare Workers, static assets)
 
-Workers & Pages → Create → Pages → connect this repo.
+`wrangler.jsonc` tells Cloudflare to serve `dist/` as static assets. No server code runs.
 
-- Framework preset: Astro
+Workers & Pages → Create → Continue with GitHub → pick this repo.
+
 - Build command: `npm run build`
-- Output directory: `dist`
+- Deploy command: `npx wrangler deploy`
 
-Then add `giuz.io` as a custom domain in the project. Add a redirect rule on the zone for `www.giuz.io` → `https://giuz.io`.
+Then, in the Worker's Settings → Domains & Routes:
+
+- Add `giuz.io` as a custom domain.
+- Turn off the `workers.dev` route so the preview URL isn't indexed.
+- Add a redirect rule on the zone for `www.giuz.io` → `https://giuz.io`.
 
 ## Before launch
 

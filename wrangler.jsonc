@@ -1,0 +1,11 @@
+{
+  // Cloudflare Workers with static assets: serves the Astro build in dist/.
+  // https://developers.cloudflare.com/workers/static-assets/
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "giuz-io",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
