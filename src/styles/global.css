@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens.
+ * Raw values live on :root (light) and flip under prefers-color-scheme (dark).
+ * `@theme inline` exposes them to Tailwind as utilities: bg-bg, text-fg, text-muted,
+ * border-line, text-accent, font-mono, text-step-2, etc.
+ * Placeholder palette: swap the values once the visual direction is decided.
+ */
+:root {
+  color-scheme: light dark;
+
+  --bg: oklch(98.5% 0.004 90);
+  --surface: oklch(96% 0.006 90);
+  --fg: oklch(22% 0.01 260);
+  --muted: oklch(48% 0.012 260);
+  --line: oklch(88% 0.008 90);
+  --accent: oklch(52% 0.16 255);
+  --accent-fg: oklch(99% 0 0);
+  --focus: oklch(60% 0.18 255);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: oklch(17% 0.008 260);
+    --surface: oklch(21% 0.01 260);
+    --fg: oklch(93% 0.006 90);
+    --muted: oklch(70% 0.01 260);
+    --line: oklch(32% 0.01 260);
+    --accent: oklch(74% 0.13 255);
+    --accent-fg: oklch(17% 0.008 260);
+    --focus: oklch(78% 0.14 255);
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+}
+
+@theme {
+  /* System stacks: zero font requests, instant render. */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+
+  /* Fluid type scale (360px → 1280px viewport). */
+  --text-step--1: clamp(0.833rem, 0.81rem + 0.1vw, 0.875rem);
+  --text-step-0: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+  --text-step-1: clamp(1.2rem, 1.12rem + 0.36vw, 1.406rem);
+  --text-step-2: clamp(1.44rem, 1.3rem + 0.62vw, 1.758rem);
+  --text-step-3: clamp(1.728rem, 1.5rem + 1vw, 2.197rem);
+  --text-step-4: clamp(2.074rem, 1.72rem + 1.56vw, 2.747rem);
+
+  --container-prose: 68ch;
+  --container-page: 72rem;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--bg);
+    color: var(--fg);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-size: var(--text-step-0);
+    line-height: 1.6;
+    min-height: 100dvh;
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.15;
+    text-wrap: balance;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+@layer components {
+  /* Long-form text from Markdown (projects, notes, legal pages). */
+  .prose {
+    max-width: var(--container-prose);
+
+    & > * + * {
+      margin-top: 1.1em;
+    }
+    & h2 {
+      font-size: var(--text-step-2);
+      margin-top: 2em;
+    }
+    & h3 {
+      font-size: var(--text-step-1);
+      margin-top: 1.6em;
+    }
+    & a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    & ul {
+      list-style: disc;
+      padding-left: 1.25em;
+    }
+    & ol {
+      list-style: decimal;
+      padding-left: 1.25em;
+    }
+    & code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: var(--surface);
+      padding: 0.1em 0.35em;
+      border-radius: 4px;
+    }
+    & pre {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: var(--text-step--1);
+    }
+    & pre code {
+      background: none;
+      padding: 0;
+    }
+  }
+
+  /* Placeholder marker for unwritten sections. Remove before launch. */
+  .pending {
+    font-family: var(--font-mono);
+    font-size: var(--text-step--1);
+    color: var(--muted);
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+  }
+}

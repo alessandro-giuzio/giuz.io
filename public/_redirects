@@ -1,0 +1,2 @@
+# Cloudflare Pages redirects. https://developers.cloudflare.com/pages/configuration/redirects/
+# www → apex is handled by a Cloudflare redirect rule on the zone, not here.

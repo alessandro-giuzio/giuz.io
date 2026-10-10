@@ -1,0 +1,33 @@
+---
+import { legalNav, site } from '@/site.config';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-line">
+  <div
+    class="mx-auto flex max-w-(--container-page) flex-col gap-4 px-5 py-8 text-step--1 text-muted sm:flex-row sm:items-center sm:justify-between sm:px-8"
+  >
+    <p>
+      © {year} {site.name} · {site.location.city}{' · '}<a href={`mailto:${site.email}`} class="hover:text-fg"
+        >{site.email}</a
+      >
+    </p>
+    <p>
+      Estudio local: <a href={site.studio.url} class="hover:text-fg">{site.studio.name}</a>
+    </p>
+    <nav aria-label="Legal">
+      <ul class="flex gap-4">
+        {
+          legalNav.map((item) => (
+            <li>
+              <a href={item.href} class="hover:text-fg">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</footer>

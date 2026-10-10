@@ -1,0 +1,44 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import { personId, site } from '@/site.config';
+
+export async function getStaticPaths() {
+  const notas = await getCollection('notas', ({ data }) => !data.draft);
+  return notas.map((nota) => ({ params: { id: nota.id }, props: { nota } }));
+}
+
+const { nota } = Astro.props;
+const { data } = nota;
+const { Content } = await render(nota);
+const fmt = new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' });
+
+const schema = [
+  {
+    '@type': 'BlogPosting',
+    headline: data.title,
+    description: data.description,
+    datePublished: data.pubDate.toISOString(),
+    ...(data.updatedDate ? { dateModified: data.updatedDate.toISOString() } : {}),
+    inLanguage: site.lang,
+    author: { '@id': personId },
+    mainEntityOfPage: new URL(Astro.url.pathname, site.url).href,
+  },
+];
+---
+
+<Base title={data.title} description={data.description} ogType="article" schema={schema}>
+  <article class="space-y-8">
+    <header class="max-w-(--container-prose) space-y-3">
+      <time datetime={data.pubDate.toISOString()} class="font-mono text-step--1 text-muted">
+        {fmt.format(data.pubDate)}
+      </time>
+      <h1 class="text-step-4">{data.title}</h1>
+      <p class="text-step-1 text-muted">{data.description}</p>
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+    <p><a href="/notas/" class="text-accent underline">← Todas las notas</a></p>
+  </article>
+</Base>

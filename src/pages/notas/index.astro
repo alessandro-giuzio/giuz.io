@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import Pending from '@/components/Pending.astro';
+
+const notas = (await getCollection('notas', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const fmt = new Intl.DateTimeFormat('es-ES', { dateStyle: 'long' });
+---
+
+<Base title="Notas" description="Notas técnicas sobre CSS, Astro, accesibilidad y rendimiento web.">
+  <div class="max-w-(--container-prose) space-y-10">
+    <header class="space-y-4">
+      <h1 class="text-step-4">Notas</h1>
+      <p class="text-step-1 text-muted">CSS, Astro, accesibilidad y rendimiento, en español.</p>
+    </header>
+    {
+      notas.length === 0 ? (
+        <Pending what="la primera nota. Pon draft: false en src/content/notas/*.md para publicarla." />
+      ) : (
+        <ul class="space-y-8">
+          {notas.map((n) => (
+            <li>
+              <time datetime={n.data.pubDate.toISOString()} class="font-mono text-step--1 text-muted">
+                {fmt.format(n.data.pubDate)}
+              </time>
+              <h2 class="mt-1 text-step-2">
+                <a href={`/notas/${n.id}/`} class="no-underline hover:underline">
+                  {n.data.title}
+                </a>
+              </h2>
+              <p class="mt-1 text-muted">{n.data.description}</p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</Base>
