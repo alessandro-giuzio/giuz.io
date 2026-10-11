@@ -26,7 +26,7 @@ Since 11 Oct 2026 the site is **one landing page** (`src/pages/index.astro`) wit
 
 - Astro 7, `output: 'static'`, `trailingSlash: 'always'`.
 - Tailwind CSS v4, CSS-first (`src/styles/global.css`). No `tailwind.config`, no DaisyUI, no component library.
-- No client-side JS by default. If a page needs interactivity, ask first.
+- No client-side JS by default. If a page needs interactivity, ask first. The only JS today is the light/dark toggle (`ThemeToggle.astro` + a tiny inline script in `Base.astro`).
 - Deployed on Cloudflare Workers static assets (`wrangler.jsonc`). Domain, DNS and email routing are on Cloudflare.
 
 ## Where things live
@@ -51,10 +51,10 @@ Since 11 Oct 2026 the site is **one landing page** (`src/pages/index.astro`) wit
 - Labels, eyebrows, code, numbers: IBM Plex Mono, `font-mono`.
 - `<em>` inside a heading renders in italic and in the accent colour. Use it to highlight one key word, not more.
 
-**Colour.** Verde bosque palette, OKLCH tokens on `:root` with a `prefers-color-scheme: dark` override. Use only the token utilities: `bg-bg`, `bg-surface`, `text-fg`, `text-muted`, `border-line`, `bg-accent`/`text-accent`, `text-accent-fg`. No raw hex or Tailwind palette colours (`text-green-700` etc.) in components.
+**Colour.** Verde bosque palette. Each token on `:root` is `light-dark(<light>, <dark>)` in OKLCH. `color-scheme: light dark` follows the system; the header toggle sets `<html data-theme="light|dark">` (saved in `localStorage`) to pin it. Don't add `prefers-color-scheme` colour overrides or Tailwind `dark:` variants: change the token instead. Use only the token utilities: `bg-bg`, `bg-surface`, `text-fg`, `text-muted`, `border-line`, `bg-accent`/`text-accent`, `text-accent-fg`. No raw hex or Tailwind palette colours (`text-green-700` etc.) in components.
 
 - Every text/background pair must pass **WCAG AA** (4.5:1 for normal text) in both light and dark. Check contrast before changing a token.
-- If you change the palette, also update `theme-color` in `Base.astro` and `public/favicon.svg`.
+- If you change the palette, also update `theme-color` in `Base.astro`, the `themeColor` map in `ThemeToggle.astro`, and `public/favicon.svg`.
 
 **Accessibility** is part of what the site sells, so it can't regress: one `h1` per page, logical heading order, visible `:focus-visible`, skip link, `aria-current` on nav, labelled `<section>`s, `prefers-reduced-motion` respected.
 

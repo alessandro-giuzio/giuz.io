@@ -2,36 +2,36 @@
 
 /*
  * Design tokens.
- * Raw values live on :root (light) and flip under prefers-color-scheme (dark).
+ * Each colour is light-dark(<light>, <dark>): the browser picks one based on `color-scheme`.
+ * - Default: `color-scheme: light dark` follows the visitor's system setting.
+ * - The header toggle sets <html data-theme="light|dark">, which pins `color-scheme` and
+ *   overrides the system (saved in localStorage, applied before first paint in Base.astro).
  * The @theme inline block exposes them to Tailwind as utilities: bg-bg, text-fg, text-muted,
  * border-line, text-accent, font-mono, text-step-2, etc.
+ *
+ * Verde bosque. All text pairs pass WCAG AA:
+ * light: text 15.8:1, muted 6.2:1, accent 7.4:1 · dark: text 16.0:1, muted 7.7:1, accent 10.7:1.
  */
 :root {
   color-scheme: light dark;
 
-  /* Verde bosque · light. All text pairs pass WCAG AA (text 15.8:1, muted 6.2:1, accent 7.4:1). */
-  --bg: oklch(97% 0.015 110); /* #f5f6eb */
-  --surface: oklch(94% 0.018 110); /* #ebecdf */
-  --fg: oklch(22% 0.025 160); /* #101e17 */
-  --muted: oklch(47% 0.025 160); /* #4f5f56 */
-  --line: oklch(87% 0.02 110); /* #d5d6c7 */
-  --accent: oklch(42% 0.09 160); /* #0c5c3c */
-  --accent-fg: oklch(98% 0.012 110); /* #f9f9f0 */
-  --focus: oklch(52% 0.11 160);
+  /*                light                                       dark */
+  --bg: light-dark(oklch(97% 0.015 110) /* #f5f6eb */, oklch(17% 0.015 160) /* #0a110d */);
+  --surface: light-dark(oklch(94% 0.018 110) /* #ebecdf */, oklch(21% 0.02 160) /* #101b15 */);
+  --fg: light-dark(oklch(22% 0.025 160) /* #101e17 */, oklch(94% 0.015 110) /* #ebece1 */);
+  --muted: light-dark(oklch(47% 0.025 160) /* #4f5f56 */, oklch(72% 0.02 140) /* #9ea89c */);
+  --line: light-dark(oklch(87% 0.02 110) /* #d5d6c7 */, oklch(31% 0.02 160) /* #28342d */);
+  --accent: light-dark(oklch(42% 0.09 160) /* #0c5c3c */, oklch(80% 0.11 155) /* #81d39f */);
+  --accent-fg: light-dark(oklch(98% 0.012 110) /* #f9f9f0 */, oklch(17% 0.015 160) /* #0a110d */);
+  --focus: light-dark(oklch(52% 0.11 160), oklch(85% 0.12 155));
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Verde bosque · dark (text 16.0:1, muted 7.7:1, accent 10.7:1). */
-    --bg: oklch(17% 0.015 160); /* #0a110d */
-    --surface: oklch(21% 0.02 160); /* #101b15 */
-    --fg: oklch(94% 0.015 110); /* #ebece1 */
-    --muted: oklch(72% 0.02 140); /* #9ea89c */
-    --line: oklch(31% 0.02 160); /* #28342d */
-    --accent: oklch(80% 0.11 155); /* #81d39f */
-    --accent-fg: oklch(17% 0.015 160); /* #0a110d */
-    --focus: oklch(85% 0.12 155);
-  }
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -194,6 +194,32 @@
   /* FAQ: hide the default disclosure triangle; the + icon replaces it. */
   summary::-webkit-details-marker {
     display: none;
+  }
+
+  /*
+   * Theme toggle icon: show the moon in light mode (switch to dark), the sun in dark mode.
+   * "Dark" = explicitly chosen, or the system is dark and light wasn't chosen.
+   */
+  .theme-toggle .icon-sun {
+    display: none;
+  }
+  :root[data-theme='dark'] .theme-toggle {
+    & .icon-sun {
+      display: block;
+    }
+    & .icon-moon {
+      display: none;
+    }
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) .theme-toggle {
+      & .icon-sun {
+        display: block;
+      }
+      & .icon-moon {
+        display: none;
+      }
+    }
   }
 
   /* Placeholder marker for unwritten sections. Remove before launch. */

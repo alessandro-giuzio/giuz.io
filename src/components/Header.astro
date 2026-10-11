@@ -1,21 +1,28 @@
 ---
 import { nav, site } from '@/site.config';
+import ThemeToggle from '@/components/ThemeToggle.astro';
 ---
 
 <header class="border-b border-line">
-  <div class="mx-auto flex max-w-(--container-page) flex-wrap items-center justify-between gap-x-8 gap-y-3 px-5 py-5 sm:px-8">
+  <!--
+    Mobile: logo and theme toggle on the first row, nav on its own row below.
+    sm and up: logo on the left, nav and toggle together on the right.
+  -->
+  <div class="mx-auto flex max-w-(--container-page) flex-wrap items-center gap-x-6 gap-y-3 px-5 py-4 sm:px-8 sm:py-5">
     <a href="/" class="font-mono text-step-0 font-semibold tracking-tight no-underline" aria-label={`${site.name}, inicio`}>
       giuz<span class="text-accent">.io</span>
     </a>
-    <nav aria-label="Principal">
+
+    <div class="ml-auto sm:order-last sm:ml-0">
+      <ThemeToggle />
+    </div>
+
+    <nav aria-label="Principal" class="order-last w-full sm:order-none sm:ml-auto sm:w-auto">
       <ul class="flex flex-wrap gap-x-6 gap-y-2 text-step--1">
         {
           nav.map((item) => (
             <li>
-              <a
-                href={item.href}
-                class="text-muted no-underline hover:text-fg"
-              >
+              <a href={item.href} class="text-muted no-underline hover:text-fg">
                 {item.label}
               </a>
             </li>
