@@ -13,53 +13,10 @@ export default defineConfig({
   },
   // Fonts are self-hosted from giuz.io: Astro copies the woff2 files from the installed
   // @fontsource packages at build time. No request ever goes to Google or a CDN.
-  // Candidates for the specimen page (/tipografia/). Trim to the chosen pair later.
+  // Latin subset only: it covers Spanish, Italian and English.
   fonts: [
     {
-      name: 'Geist',
-      cssVariable: '--font-geist',
-      provider: fontProviders.local(),
-      fallbacks: ['sans-serif'],
-      options: {
-        variants: [
-          { src: ['@fontsource-variable/geist/files/geist-latin-wght-normal.woff2'], weight: '100 900', style: 'normal' },
-        ],
-      },
-    },
-    {
-      name: 'Geist Mono',
-      cssVariable: '--font-geist-mono',
-      provider: fontProviders.local(),
-      fallbacks: ['monospace'],
-      options: {
-        variants: [
-          { src: ['@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2'], weight: '100 900', style: 'normal' },
-        ],
-      },
-    },
-    {
-      name: 'Schibsted Grotesk',
-      cssVariable: '--font-schibsted',
-      provider: fontProviders.local(),
-      fallbacks: ['sans-serif'],
-      options: {
-        variants: [
-          { src: ['@fontsource-variable/schibsted-grotesk/files/schibsted-grotesk-latin-wght-normal.woff2'], weight: '400 900', style: 'normal' },
-        ],
-      },
-    },
-    {
-      name: 'JetBrains Mono',
-      cssVariable: '--font-jetbrains',
-      provider: fontProviders.local(),
-      fallbacks: ['monospace'],
-      options: {
-        variants: [
-          { src: ['@fontsource-variable/jetbrains-mono/files/jetbrains-mono-latin-wght-normal.woff2'], weight: '100 800', style: 'normal' },
-        ],
-      },
-    },
-    {
+      // Headings: high-contrast display serif.
       name: 'Instrument Serif',
       cssVariable: '--font-instrument',
       provider: fontProviders.local(),
@@ -72,6 +29,7 @@ export default defineConfig({
       },
     },
     {
+      // Body text and UI: variable, one file for every weight.
       name: 'Inter',
       cssVariable: '--font-inter',
       provider: fontProviders.local(),
@@ -83,6 +41,7 @@ export default defineConfig({
       },
     },
     {
+      // Labels, code and numbers.
       name: 'IBM Plex Mono',
       cssVariable: '--font-plex-mono',
       provider: fontProviders.local(),
@@ -98,7 +57,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Legal pages are noindex: keep them out of the sitemap too.
-      filter: (page) => !/\/(aviso-legal|privacidad|cookies|tipografia)\/$/.test(page),
+      filter: (page) => !/\/(aviso-legal|privacidad|cookies)\/$/.test(page),
     }),
   ],
   vite: {
