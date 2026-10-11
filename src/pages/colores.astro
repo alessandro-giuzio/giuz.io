@@ -54,6 +54,18 @@ const palettes: Palette[] = [
     },
     contrast: { light: 'Texto 16.5 · Secundario 6.4 · Botón 13.0 · Bermellón 5.2', dark: 'Texto 16.0 · Secundario 7.7 · Botón 14.2 · Bermellón 5.6' },
   },
+  {
+    id: 'bosque',
+    name: '4 · Verde bosque',
+    note: 'Fondo crema con un verde profundo. Natural y tranquilo, poco habitual en webs técnicas. Encaja con la idea de algo bien hecho y duradero.',
+    light: { bg: 'oklch(97% 0.015 110)', surface: 'oklch(94% 0.018 110)', fg: 'oklch(22% 0.025 160)', muted: 'oklch(47% 0.025 160)', line: 'oklch(87% 0.02 110)', accent: 'oklch(42% 0.09 160)', accentFg: 'oklch(98% 0.012 110)', mark: 'oklch(42% 0.09 160)' },
+    dark: { bg: 'oklch(17% 0.015 160)', surface: 'oklch(21% 0.02 160)', fg: 'oklch(94% 0.015 110)', muted: 'oklch(72% 0.02 140)', line: 'oklch(31% 0.02 160)', accent: 'oklch(80% 0.11 155)', accentFg: 'oklch(17% 0.015 160)', mark: 'oklch(80% 0.11 155)' },
+    hex: {
+      light: { bg: '#f5f6eb', surface: '#ebecdf', fg: '#101e17', muted: '#4f5f56', line: '#d5d6c7', accent: '#0c5c3c', accentFg: '#f9f9f0', mark: '#0c5c3c' },
+      dark: { bg: '#0a110d', surface: '#101b15', fg: '#ebece1', muted: '#9ea89c', line: '#28342d', accent: '#81d39f', accentFg: '#0a110d', mark: '#81d39f' },
+    },
+    contrast: { light: 'Texto 15.8 · Secundario 6.2 · Acento 7.4', dark: 'Texto 16.0 · Secundario 7.7 · Acento 10.7' },
+  },
 ];
 
 const vars = (m: Mode) =>
@@ -76,7 +88,7 @@ const swatchKeys: { key: keyof Mode; label: string }[] = [
     <h1 class="text-heading-1">Paletas: segunda ronda</h1>
     <p class="text-muted">
       Cada paleta en claro y oscuro, con la tipografía definitiva. Todas cumplen WCAG AA: texto principal por encima de
-      15:1, texto secundario, acento y detalles por encima de 4.5:1. Óxido y Verde bosque se han retirado.
+      15:1, texto secundario, acento y detalles por encima de 4.5:1. Óxido se ha retirado.
     </p>
   </header>
 
