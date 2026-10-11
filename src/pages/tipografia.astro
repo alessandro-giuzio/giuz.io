@@ -1,0 +1,153 @@
+---
+/**
+ * Typography specimen: compare candidate pairings with real copy.
+ * Temporary page on the design/typography branch. noindex, not in the sitemap.
+ */
+import { Font } from 'astro:assets';
+import Base from '@/layouts/Base.astro';
+
+const pairings = [
+  {
+    id: 'a',
+    name: 'A · Técnico neutro',
+    fonts: 'Geist + Geist Mono',
+    note: 'Una sola familia con su mono gemela. Limpia, muy legible, se lee como "herramienta de desarrollador". Riesgo: es la tipografía de Vercel y se ve mucho en webs de devs.',
+    display: '--font-geist',
+    text: '--font-geist',
+    mono: '--font-geist-mono',
+    displayWeight: 600,
+    displayTracking: '-0.03em',
+    displayScale: 1,
+  },
+  {
+    id: 'b',
+    name: 'B · Grotesca con carácter',
+    fonts: 'Schibsted Grotesk + JetBrains Mono',
+    note: 'Grotesca de origen periodístico, más cálida y con personalidad en los titulares. La mono es la de los IDEs: técnica sin ser fría. Menos vista que Geist o Inter.',
+    display: '--font-schibsted',
+    text: '--font-schibsted',
+    mono: '--font-jetbrains',
+    displayWeight: 700,
+    displayTracking: '-0.025em',
+    displayScale: 1,
+  },
+  {
+    id: 'c',
+    name: 'C · Editorial',
+    fonts: 'Instrument Serif + Inter + IBM Plex Mono',
+    note: 'Titulares en serif con contraste, texto en Inter. Se aleja del look típico de dev y transmite oficio y cuidado, algo que valoran los estudios de diseño. Tres familias: la más pesada de las tres opciones.',
+    display: '--font-instrument',
+    text: '--font-inter',
+    mono: '--font-plex-mono',
+    displayWeight: 400,
+    displayTracking: '-0.01em',
+    // A high-contrast display serif reads smaller than a grotesk at the same size.
+    displayScale: 1.3,
+  },
+];
+---
+
+<Base title="Tipografía" noindex>
+  <Fragment slot="head">
+    <Font cssVariable="--font-geist" preload />
+    <Font cssVariable="--font-geist-mono" />
+    <Font cssVariable="--font-schibsted" />
+    <Font cssVariable="--font-jetbrains" />
+    <Font cssVariable="--font-instrument" />
+    <Font cssVariable="--font-inter" />
+    <Font cssVariable="--font-plex-mono" />
+  </Fragment>
+
+  <header class="max-w-(--container-prose) space-y-3">
+    <p class="font-mono text-step--1 text-muted">Specimen · rama design/typography</p>
+    <h1 class="text-step-3">Tres combinaciones tipográficas</h1>
+    <p class="text-muted">
+      Mismo texto, mismos colores, solo cambia la tipografía. Todas se sirven desde giuz.io (Astro Fonts API +
+      Fontsource), sin peticiones a Google.
+    </p>
+  </header>
+
+  {
+    pairings.map((p) => (
+      <section
+        id={p.id}
+        class="specimen mt-16 border-t border-line pt-10"
+        style={`--display:var(${p.display});--text:var(${p.text});--mono:var(${p.mono});--display-weight:${p.displayWeight};--display-tracking:${p.displayTracking}`}
+        aria-labelledby={`${p.id}-name`}
+      >
+        <div class="mb-10 flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id={`${p.id}-name`} class="sp-mono text-step-0 font-medium">
+            {p.name}
+          </h2>
+          <p class="sp-mono text-step--1 text-muted">{p.fonts}</p>
+        </div>
+
+        <div class="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
+          <div class="space-y-6">
+            <p class="sp-mono text-step--1 text-muted">Desarrollador front-end · Donostia-San Sebastián</p>
+            <p class="sp-display leading-[1.05]" style={`font-size:calc(var(--text-step-4) * ${p.displayScale})`}>Tú diseñas, yo lo construyo bien.</p>
+            <p class="sp-text text-step-1 text-muted">
+              Ayudo a agencias, estudios y diseñadores a convertir sus diseños en sitios rápidos, accesibles y fáciles
+              de mantener.
+            </p>
+            <div class="sp-text flex flex-wrap gap-3">
+              <span class="rounded-md bg-accent px-5 py-3 font-medium text-accent-fg">Cómo trabajo con agencias</span>
+              <span class="rounded-md border border-line px-5 py-3 font-medium">Hablemos</span>
+            </div>
+
+            <p class="sp-display pt-6" style={`font-size:calc(var(--text-step-2) * ${p.displayScale})`}>Revisión técnica antes del lanzamiento</p>
+            <p class="sp-text max-w-(--container-prose)">
+              Reviso rendimiento, accesibilidad (WCAG 2.2 AA), SEO técnico y estructura del código. Recibes un informe
+              claro con lo que hay que corregir, ordenado por impacto, y una llamada de 45 minutos para revisarlo
+              juntos. ¿El objetivo? Que vuestro cliente no encuentre nada que reclamar.
+            </p>
+          </div>
+
+          <div class="space-y-6">
+            <pre class="sp-mono overflow-x-auto rounded-lg border border-line bg-surface p-4 text-step--1"><code>{`.card {
+  container-type: inline-size;
+  padding: var(--space-m);
+}
+@container (width > 40ch) {
+  .card { grid-template-columns: 1fr 2fr; }
+}`}</code></pre>
+
+            <dl class="sp-text grid grid-cols-3 gap-3">
+              <div class="rounded-lg border border-line p-3">
+                <dt class="text-step--1 text-muted">Lighthouse</dt>
+                <dd class="sp-mono text-step-2">100</dd>
+              </div>
+              <div class="rounded-lg border border-line p-3">
+                <dt class="text-step--1 text-muted">LCP</dt>
+                <dd class="sp-mono text-step-2">0,8 s</dd>
+              </div>
+              <div class="rounded-lg border border-line p-3">
+                <dt class="text-step--1 text-muted">CLS</dt>
+                <dd class="sp-mono text-step-2">0</dd>
+              </div>
+            </dl>
+
+            <p class="sp-text text-step-1">Ñandú ágil, ¿pingüino? ¡Sí! — 1.234,50 €</p>
+            <p class="sp-text text-step--1 text-muted">AaBbCcDdEeFfGgHhIiJjKkLlMmNnÑñOoPpQqRrSsTtUuVvWwXxYyZz 0123456789</p>
+            <p class="sp-text text-step--1 text-muted">{p.note}</p>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+</Base>
+
+<style>
+  .specimen :global(.sp-display) {
+    font-family: var(--display);
+    font-weight: var(--display-weight);
+    letter-spacing: var(--display-tracking);
+    text-wrap: balance;
+  }
+  .specimen :global(.sp-text) {
+    font-family: var(--text);
+  }
+  .specimen :global(.sp-mono) {
+    font-family: var(--mono);
+  }
+</style>

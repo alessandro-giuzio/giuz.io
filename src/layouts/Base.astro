@@ -93,6 +93,7 @@ const graph = {
     <meta name="twitter:card" content="summary" />
 
     <script type="application/ld+json" set:html={JSON.stringify(graph)} />
+    <slot name="head" />
   </head>
   <body class="flex min-h-dvh flex-col bg-bg text-fg antialiased">
     <a
