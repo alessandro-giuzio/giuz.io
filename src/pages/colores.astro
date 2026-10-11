@@ -66,6 +66,18 @@ const palettes: Palette[] = [
     },
     contrast: { light: 'Texto 15.8 · Secundario 6.2 · Acento 7.4', dark: 'Texto 16.0 · Secundario 7.7 · Acento 10.7' },
   },
+  {
+    id: 'oxido',
+    name: '5 · Óxido',
+    note: 'Arena cálida con un rojo óxido. El más expresivo, pero recuerda mucho a la interfaz de Claude (arena + terracota): se incluye solo como referencia.',
+    light: { bg: 'oklch(97% 0.014 70)', surface: 'oklch(94% 0.018 70)', fg: 'oklch(22% 0.02 40)', muted: 'oklch(48% 0.025 45)', line: 'oklch(87% 0.02 70)', accent: 'oklch(50% 0.15 38)', accentFg: 'oklch(98% 0.01 70)', mark: 'oklch(50% 0.15 38)' },
+    dark: { bg: 'oklch(17% 0.012 40)', surface: 'oklch(21% 0.016 40)', fg: 'oklch(94% 0.014 70)', muted: 'oklch(73% 0.02 55)', line: 'oklch(31% 0.02 40)', accent: 'oklch(74% 0.13 42)', accentFg: 'oklch(17% 0.012 40)', mark: 'oklch(74% 0.13 42)' },
+    hex: {
+      light: { bg: '#fbf4eb', surface: '#f3e9df', fg: '#231814', muted: '#6a5952', line: '#ddd2c6', accent: '#a73b15', accentFg: '#fdf7f1', mark: '#a73b15' },
+      dark: { bg: '#140e0b', surface: '#1f1613', fg: '#f1eae1', muted: '#b2a59c', line: '#3a2d29', accent: '#ef8d67', accentFg: '#140e0b', mark: '#ef8d67' },
+    },
+    contrast: { light: 'Texto 15.9 · Secundario 6.0 · Acento 5.9', dark: 'Texto 16.0 · Secundario 8.0 · Acento 7.9' },
+  },
 ];
 
 const vars = (m: Mode) =>
@@ -88,7 +100,7 @@ const swatchKeys: { key: keyof Mode; label: string }[] = [
     <h1 class="text-heading-1">Paletas: segunda ronda</h1>
     <p class="text-muted">
       Cada paleta en claro y oscuro, con la tipografía definitiva. Todas cumplen WCAG AA: texto principal por encima de
-      15:1, texto secundario, acento y detalles por encima de 4.5:1. Óxido se ha retirado.
+      15:1, texto secundario, acento y detalles por encima de 4.5:1.
     </p>
   </header>
 
