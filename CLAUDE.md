@@ -14,6 +14,14 @@ npm run preview   # serve dist/ locally
 
 Node 22.12+. No test suite: `npm run build` is the gate.
 
+## Structure: a single landing page
+
+Since 11 Oct 2026 the site is **one landing page** (`src/pages/index.astro`) with sections in this order: hero → `#problema` → `#servicios` → `#proyectos` → `#proceso` → `#sobre-mi` (+ FAQ) → `#contacto`. The nav in `site.config.ts` links to these ids; keep them in sync.
+
+- Don't add new top-level pages without asking. New content is a new section or a change to an existing one.
+- Separate pages that still exist: legal pages, `/proyectos/<id>/` case studies (optional, linked from the cards), `/notas/` blog (not in the nav; `noindex` and out of the sitemap until the first note is published, then remove `notas` from the sitemap filter).
+- The old `/agencias/`, `/sobre-mi/`, `/contacto/` and `/proyectos/` URLs 301 to their section via `public/_redirects`.
+
 ## Stack
 
 - Astro 7, `output: 'static'`, `trailingSlash: 'always'`.
@@ -52,6 +60,7 @@ Node 22.12+. No test suite: `npm run build` is the gate.
 
 ## Content and SEO
 
+- Landing sections use the `.section` (spacing + scroll margin) and `.eyebrow` (mono label) classes from `global.css`.
 - Copy is in **Spanish**, first person singular ("yo", never "nosotros"), addressing agencies as "vosotros". Plain and direct, no buzzwords.
 - Every page goes through `Base.astro` with a `title` and `description`. The home page omits `title`.
 - The schema.org graph (`Person`, `WebSite`, `WebPage`) is built in `Base.astro`. Pages add nodes with the `schema` prop. The `Person` `@id` is `https://giuz.io/#person`, and agencyga.es references it as `founder`: never change it.

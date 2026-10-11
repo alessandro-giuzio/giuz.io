@@ -22,7 +22,8 @@ Node 22.12 or newer (see `.node-version`).
 | `src/site.config.ts` | Name, URL, email, socials, nav. Start here. |
 | `src/styles/global.css` | Design tokens (colours, type scale) and base styles. |
 | `src/layouts/Base.astro` | `<head>`, meta, Open Graph, schema.org graph, header and footer. |
-| `src/pages/` | One file per page. |
+| `src/pages/index.astro` | The landing page: the whole site, in sections. |
+| `src/pages/` | Plus legal pages, case-study pages and the (hidden) blog. |
 | `src/content/proyectos/` | Case studies, one Markdown file each. |
 | `src/content/notas/` | Technical notes (blog), one Markdown file each. |
 | `src/content.config.ts` | Frontmatter schemas for both collections. |

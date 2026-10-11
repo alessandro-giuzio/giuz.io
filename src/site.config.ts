@@ -31,11 +31,12 @@ export const site = {
   sameAs: ['https://github.com/alessandro-giuzio', 'https://www.agencyga.es/'],
 } as const;
 
+/** Single-page site: the main nav jumps to sections of the landing page. */
 export const nav = [
-  { href: '/agencias/', label: 'Para agencias' },
-  { href: '/proyectos/', label: 'Proyectos' },
-  { href: '/sobre-mi/', label: 'Sobre mí' },
-  { href: '/contacto/', label: 'Contacto' },
+  { href: '/#servicios', label: 'Servicios' },
+  { href: '/#proyectos', label: 'Proyectos' },
+  { href: '/#sobre-mi', label: 'Sobre mí' },
+  { href: '/#contacto', label: 'Contacto' },
 ] as const;
 
 export const legalNav = [

@@ -1,34 +1,205 @@
 ---
+/**
+ * The whole site is this landing page. Sections, in order:
+ * hero → problema → servicios → proyectos → proceso → sobre-mi (+ FAQ) → contacto.
+ * Nav links in site.config.ts point at the section ids below; keep them in sync.
+ */
+import { getCollection } from 'astro:content';
 import Base from '@/layouts/Base.astro';
 import Pending from '@/components/Pending.astro';
 import { site } from '@/site.config';
+
+const proyectos = (await getCollection('proyectos', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year)
+  .slice(0, 3);
+
+const servicios = [
+  {
+    id: 'revision',
+    name: 'Revisión técnica',
+    tag: 'Para empezar',
+    pending: 'qué revisas (rendimiento, accesibilidad WCAG AA, SEO técnico, estructura), qué entregas, plazo y precio fijo.',
+  },
+  {
+    id: 'white-label',
+    name: 'Desarrollo white-label',
+    tag: 'Por proyecto',
+    pending: 'construcción en Astro, WordPress o Vue con el nombre de la agencia, NDA y entregables.',
+  },
+  {
+    id: 'sesiones',
+    name: 'Bono de sesiones',
+    tag: 'Flexible',
+    pending: 'paquete de sesiones para consultoría, correcciones o desarrollo, sin permanencia.',
+  },
+];
+
+const pasos = [
+  { n: '01', name: 'Llamada de 20 minutos', pending: 'conocernos y ver si encajamos.' },
+  { n: '02', name: 'Revisión técnica', pending: 'reviso un proyecto real y os doy un informe.' },
+  { n: '03', name: 'Colaboración', pending: 'proyectos, bonos de sesiones o soporte continuo.' },
+];
+
+const faq = [
+  '¿Trabajas solo?',
+  '¿Qué pasa si te pones enfermo o no estás disponible?',
+  '¿Puedes trabajar sin que nuestro cliente sepa que existes?',
+  '¿Qué pasa con el código si dejamos de trabajar juntos?',
+  '¿Cobras por horas o por proyecto?',
+];
 ---
 
 <Base>
-  <section class="max-w-(--container-prose) space-y-6">
+  <!-- Hero -->
+  <section class="max-w-(--container-prose) space-y-6 pt-4 sm:pt-10" aria-labelledby="hero-title">
     <p class="font-mono text-step--1 text-muted">{site.jobTitle} · {site.location.city}</p>
-    <h1 class="text-heading-1">{site.tagline}</h1>
+    <h1 id="hero-title" class="text-heading-1">Tú diseñas, yo lo construyo <em>bien</em>.</h1>
     <p class="text-step-1 text-muted">
-      Soy {site.name}. Ayudo a agencias, estudios y diseñadores a convertir sus diseños en sitios rápidos, accesibles y
-      fáciles de mantener.
+      Soy {site.name}. Ayudo a agencias, estudios y diseñadores a convertir sus diseños en sitios rápidos, accesibles
+      y fáciles de mantener.
     </p>
-    <div class="flex flex-wrap gap-4 pt-2">
-      <a href="/agencias/" class="rounded-md bg-accent px-5 py-3 font-medium text-accent-fg no-underline hover:opacity-90">
-        Cómo trabajo con agencias
-      </a>
-      <a href="/contacto/" class="rounded-md border border-line px-5 py-3 font-medium no-underline hover:border-fg">
+    <div class="flex flex-wrap gap-3 pt-2">
+      <a href="#contacto" class="rounded-md bg-accent px-5 py-3 font-medium text-accent-fg no-underline hover:opacity-90">
         Hablemos
+      </a>
+      <a href="#servicios" class="rounded-md border border-line px-5 py-3 font-medium no-underline hover:border-fg">
+        Ver servicios
       </a>
     </div>
   </section>
 
-  <section class="mt-20 max-w-(--container-prose) space-y-4" aria-labelledby="oferta">
-    <h2 id="oferta" class="text-heading-2">Por dónde empezar</h2>
-    <Pending what="la Revisión técnica como oferta de entrada (qué incluye, precio, plazo)." />
+  <!-- Problema -->
+  <section id="problema" class="section" aria-labelledby="problema-title">
+    <p class="eyebrow">El problema</p>
+    <h2 id="problema-title" class="text-heading-2">Cuando el diseño enamora, pero la web no está a la altura</h2>
+    <div class="mt-6 max-w-(--container-prose)">
+      <Pending what="los 3–4 problemas típicos de una agencia: webs lentas, fallos de accesibilidad, código que nadie quiere tocar, entregas que no se parecen al diseño." />
+    </div>
   </section>
 
-  <section class="mt-16 max-w-(--container-prose) space-y-4" aria-labelledby="proyectos">
-    <h2 id="proyectos" class="text-heading-2">Proyectos recientes</h2>
-    <Pending what="dos casos destacados con resultados medibles." />
+  <!-- Servicios -->
+  <section id="servicios" class="section" aria-labelledby="servicios-title">
+    <p class="eyebrow">Servicios</p>
+    <h2 id="servicios-title" class="text-heading-2">Cómo puedo ayudaros</h2>
+    <ul class="mt-8 grid gap-4 md:grid-cols-3">
+      {
+        servicios.map((s) => (
+          <li id={s.id} class="flex flex-col gap-3 rounded-lg border border-line bg-surface p-6">
+            <p class="font-mono text-step--1 text-accent">{s.tag}</p>
+            <h3 class="text-heading-3">{s.name}</h3>
+            <Pending what={s.pending} />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- Proyectos -->
+  <section id="proyectos" class="section" aria-labelledby="proyectos-title">
+    <p class="eyebrow">Proyectos</p>
+    <h2 id="proyectos-title" class="text-heading-2">Trabajo reciente</h2>
+    {
+      proyectos.length === 0 ? (
+        <div class="mt-8">
+          <Pending what="2–3 casos con resultados medibles. Se publican poniendo draft: false en src/content/proyectos/*.md." />
+        </div>
+      ) : (
+        <ul class="mt-8 grid gap-4 md:grid-cols-3">
+          {proyectos.map((p) => (
+            <li class="flex flex-col gap-2 rounded-lg border border-line p-6">
+              <p class="font-mono text-step--1 text-muted">
+                {p.data.client} · {p.data.year}
+              </p>
+              <h3 class="text-heading-3">
+                <a href={`/proyectos/${p.id}/`} class="no-underline hover:underline">
+                  {p.data.title}
+                </a>
+              </h3>
+              <p class="text-muted">{p.data.description}</p>
+              {p.data.results.length > 0 && (
+                <dl class="mt-2 grid grid-cols-2 gap-2">
+                  {p.data.results.slice(0, 2).map((r) => (
+                    <div>
+                      <dt class="text-step--1 text-muted">{r.label}</dt>
+                      <dd class="font-mono text-step-1">{r.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+              )}
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </section>
+
+  <!-- Proceso -->
+  <section id="proceso" class="section" aria-labelledby="proceso-title">
+    <p class="eyebrow">Cómo trabajamos</p>
+    <h2 id="proceso-title" class="text-heading-2">Tres pasos, sin reuniones infinitas</h2>
+    <ol class="mt-8 grid gap-6 md:grid-cols-3">
+      {
+        pasos.map((p) => (
+          <li class="space-y-2 border-t border-line pt-4">
+            <p class="font-mono text-step--1 text-accent">{p.n}</p>
+            <h3 class="text-heading-3">{p.name}</h3>
+            <Pending what={p.pending} />
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Sobre mí + FAQ -->
+  <section id="sobre-mi" class="section" aria-labelledby="sobre-mi-title">
+    <p class="eyebrow">Sobre mí</p>
+    <h2 id="sobre-mi-title" class="text-heading-2">Quién está detrás</h2>
+    <div class="mt-6 max-w-(--container-prose)">
+      <Pending what="foto, trayectoria breve, cómo trabajo, idiomas (español, inglés, italiano) y relación con AgencyGA." />
+    </div>
+
+    <h3 id="faq" class="mt-12 text-heading-3">Preguntas que las agencias suelen hacerse</h3>
+    <div class="mt-4 max-w-(--container-prose) divide-y divide-line border-y border-line">
+      {
+        faq.map((q) => (
+          <details class="group py-4">
+            <summary class="cursor-pointer list-none font-medium marker:hidden">
+              <span class="flex items-center justify-between gap-4">
+                {q}
+                <span class="font-mono text-muted transition-transform group-open:rotate-45" aria-hidden="true">
+                  +
+                </span>
+              </span>
+            </summary>
+            <div class="pt-3">
+              <Pending what="respuesta." />
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section id="contacto" class="section" aria-labelledby="contacto-title">
+    <p class="eyebrow">Contacto</p>
+    <h2 id="contacto-title" class="text-heading-2">Hablemos de vuestro próximo proyecto</h2>
+    <div class="mt-6 max-w-(--container-prose) space-y-4">
+      <p class="text-step-1 text-muted">Contadme en qué estáis trabajando y vemos si encajamos.</p>
+      <p class="text-step-1">
+        <a href={`mailto:${site.email}`} class="text-accent underline">{site.email}</a>
+      </p>
+      {
+        site.bookingUrl ? (
+          <p>
+            <a href={site.bookingUrl} class="rounded-md bg-accent px-5 py-3 font-medium text-accent-fg no-underline hover:opacity-90">
+              Reservar una llamada de 20 minutos
+            </a>
+          </p>
+        ) : (
+          <Pending what="enlace de reserva para la llamada de 20 minutos (site.config.ts → bookingUrl)." />
+        )
+      }
+    </div>
   </section>
 </Base>

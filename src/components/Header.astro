@@ -1,8 +1,5 @@
 ---
 import { nav, site } from '@/site.config';
-
-const path = Astro.url.pathname;
-const isCurrent = (href: string) => path === href || (href !== '/' && path.startsWith(href));
 ---
 
 <header class="border-b border-line">
@@ -17,8 +14,7 @@ const isCurrent = (href: string) => path === href || (href !== '/' && path.start
             <li>
               <a
                 href={item.href}
-                aria-current={isCurrent(item.href) ? 'page' : undefined}
-                class="text-muted no-underline hover:text-fg aria-[current=page]:text-fg aria-[current=page]:underline"
+                class="text-muted no-underline hover:text-fg"
               >
                 {item.label}
               </a>

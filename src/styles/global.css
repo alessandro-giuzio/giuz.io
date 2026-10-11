@@ -177,6 +177,25 @@
     }
   }
 
+  /* Landing page sections: generous vertical rhythm, and room above when jumped to via the nav. */
+  .section {
+    margin-top: clamp(5rem, 4rem + 4vw, 8rem);
+    scroll-margin-top: 2rem;
+  }
+
+  /* Small mono label above a section heading. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-step--1);
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+
+  /* FAQ: hide the default disclosure triangle; the + icon replaces it. */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
   /* Placeholder marker for unwritten sections. Remove before launch. */
   .pending {
     font-family: var(--font-mono);

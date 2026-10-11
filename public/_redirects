@@ -1,2 +1,12 @@
 # Cloudflare static-assets redirects. https://developers.cloudflare.com/workers/static-assets/redirects/
 # www → apex is handled by a Cloudflare redirect rule on the zone, not here.
+
+# 11 Oct 2026: the site became a single landing page. Old pages point to their section.
+/agencias/   /#servicios  301
+/agencias    /#servicios  301
+/sobre-mi/   /#sobre-mi   301
+/sobre-mi    /#sobre-mi   301
+/contacto/   /#contacto   301
+/contacto    /#contacto   301
+/proyectos/  /#proyectos  301
+/proyectos   /#proyectos  301

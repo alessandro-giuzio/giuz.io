@@ -57,7 +57,8 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Legal pages are noindex: keep them out of the sitemap too.
-      filter: (page) => !/\/(aviso-legal|privacidad|cookies)\/$/.test(page),
+      // /notas/ stays out until the blog has its first published note (then remove it here).
+      filter: (page) => !/\/(aviso-legal|privacidad|cookies|notas)\/$/.test(page),
     }),
   ],
   vite: {
