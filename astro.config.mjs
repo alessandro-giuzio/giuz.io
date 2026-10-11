@@ -57,7 +57,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Legal pages are noindex: keep them out of the sitemap too.
-      filter: (page) => !/\/(aviso-legal|privacidad|cookies)\/$/.test(page),
+      filter: (page) => !/\/(aviso-legal|privacidad|cookies|colores)\/$/.test(page),
     }),
   ],
   vite: {

@@ -1,0 +1,155 @@
+---
+/**
+ * Colour specimen: three palettes, each in light and dark, with real copy.
+ * Temporary page on the design/colors branch. noindex, not in the sitemap.
+ * Contrast ratios (WCAG 2.x) were computed from these exact OKLCH values.
+ */
+import Base from '@/layouts/Base.astro';
+
+type Mode = { bg: string; surface: string; fg: string; muted: string; line: string; accent: string; accentFg: string };
+type Palette = {
+  id: string;
+  name: string;
+  note: string;
+  light: Mode;
+  dark: Mode;
+  hex: { light: Record<keyof Mode, string>; dark: Record<keyof Mode, string> };
+  contrast: { light: string; dark: string };
+};
+
+const palettes: Palette[] = [
+  {
+    id: 'tinta',
+    name: '1 · Papel y tinta',
+    note: 'Papel cálido y tinta azul profunda, como una pluma. Sobrio y atemporal: el color casi no se nota, deja hablar a la tipografía.',
+    light: { bg: 'oklch(97.5% 0.012 85)', surface: 'oklch(94.5% 0.014 85)', fg: 'oklch(21% 0.02 265)', muted: 'oklch(47% 0.02 265)', line: 'oklch(87% 0.015 85)', accent: 'oklch(38% 0.13 264)', accentFg: 'oklch(98% 0.01 85)' },
+    dark: { bg: 'oklch(17% 0.015 265)', surface: 'oklch(21% 0.018 265)', fg: 'oklch(94% 0.012 85)', muted: 'oklch(72% 0.015 265)', line: 'oklch(31% 0.02 265)', accent: 'oklch(78% 0.1 264)', accentFg: 'oklch(17% 0.015 265)' },
+    hex: {
+      light: { bg: '#faf6ee', surface: '#f1ece3', fg: '#141822', muted: '#555b66', line: '#d9d4c9', accent: '#1d3c86', accentFg: '#fbf8f1' },
+      dark: { bg: '#0c0f16', surface: '#141821', fg: '#efebe2', muted: '#a0a5ae', line: '#2b303b', accent: '#97b7f8', accentFg: '#0c0f16' },
+    },
+    contrast: { light: 'Texto 16.5 · Secundario 6.4 · Acento 9.6', dark: 'Texto 16.0 · Secundario 7.7 · Acento 9.5' },
+  },
+  {
+    id: 'bosque',
+    name: '2 · Verde bosque',
+    note: 'Fondo crema con un verde profundo. Natural y tranquilo, poco habitual en webs técnicas. Encaja con la idea de algo bien hecho y duradero.',
+    light: { bg: 'oklch(97% 0.015 110)', surface: 'oklch(94% 0.018 110)', fg: 'oklch(22% 0.025 160)', muted: 'oklch(47% 0.025 160)', line: 'oklch(87% 0.02 110)', accent: 'oklch(42% 0.09 160)', accentFg: 'oklch(98% 0.012 110)' },
+    dark: { bg: 'oklch(17% 0.015 160)', surface: 'oklch(21% 0.02 160)', fg: 'oklch(94% 0.015 110)', muted: 'oklch(72% 0.02 140)', line: 'oklch(31% 0.02 160)', accent: 'oklch(80% 0.11 155)', accentFg: 'oklch(17% 0.015 160)' },
+    hex: {
+      light: { bg: '#f5f6eb', surface: '#ebecdf', fg: '#101e17', muted: '#4f5f56', line: '#d5d6c7', accent: '#0c5c3c', accentFg: '#f9f9f0' },
+      dark: { bg: '#0a110d', surface: '#101b15', fg: '#ebece1', muted: '#9ea89c', line: '#28342d', accent: '#81d39f', accentFg: '#0a110d' },
+    },
+    contrast: { light: 'Texto 15.8 · Secundario 6.2 · Acento 7.4', dark: 'Texto 16.0 · Secundario 7.7 · Acento 10.7' },
+  },
+  {
+    id: 'oxido',
+    name: '3 · Óxido',
+    note: 'Arena cálida con un rojo óxido. El más expresivo de los tres: tiene carácter de estudio editorial y destaca en la bandeja de cualquier agencia.',
+    light: { bg: 'oklch(97% 0.014 70)', surface: 'oklch(94% 0.018 70)', fg: 'oklch(22% 0.02 40)', muted: 'oklch(48% 0.025 45)', line: 'oklch(87% 0.02 70)', accent: 'oklch(50% 0.15 38)', accentFg: 'oklch(98% 0.01 70)' },
+    dark: { bg: 'oklch(17% 0.012 40)', surface: 'oklch(21% 0.016 40)', fg: 'oklch(94% 0.014 70)', muted: 'oklch(73% 0.02 55)', line: 'oklch(31% 0.02 40)', accent: 'oklch(74% 0.13 42)', accentFg: 'oklch(17% 0.012 40)' },
+    hex: {
+      light: { bg: '#fbf4eb', surface: '#f3e9df', fg: '#231814', muted: '#6a5952', line: '#ddd2c6', accent: '#a73b15', accentFg: '#fdf7f1' },
+      dark: { bg: '#140e0b', surface: '#1f1613', fg: '#f1eae1', muted: '#b2a59c', line: '#3a2d29', accent: '#ef8d67', accentFg: '#140e0b' },
+    },
+    contrast: { light: 'Texto 15.9 · Secundario 6.0 · Acento 5.9', dark: 'Texto 16.0 · Secundario 8.0 · Acento 7.9' },
+  },
+];
+
+const vars = (m: Mode) =>
+  `--bg:${m.bg};--surface:${m.surface};--fg:${m.fg};--muted:${m.muted};--line:${m.line};--accent:${m.accent};--accent-fg:${m.accentFg};color-scheme:normal`;
+
+const swatchKeys: { key: keyof Mode; label: string }[] = [
+  { key: 'bg', label: 'Fondo' },
+  { key: 'surface', label: 'Superficie' },
+  { key: 'fg', label: 'Texto' },
+  { key: 'muted', label: 'Secundario' },
+  { key: 'line', label: 'Línea' },
+  { key: 'accent', label: 'Acento' },
+];
+---
+
+<Base title="Colores" noindex>
+  <header class="max-w-(--container-prose) space-y-3">
+    <p class="font-mono text-step--1 text-muted">Specimen · rama design/colors</p>
+    <h1 class="text-heading-1">Tres paletas</h1>
+    <p class="text-muted">
+      Cada paleta en claro y oscuro, con la tipografía definitiva. Todas cumplen WCAG AA: texto principal por encima de
+      15:1, texto secundario y acento por encima de 4.5:1.
+    </p>
+  </header>
+
+  {
+    palettes.map((p) => (
+      <section id={p.id} class="mt-16" aria-labelledby={`${p.id}-name`}>
+        <div class="mb-4 flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id={`${p.id}-name`} class="text-heading-3">
+            {p.name}
+          </h2>
+          <p class="max-w-(--container-prose) text-step--1 text-muted">{p.note}</p>
+        </div>
+
+        <div class="grid gap-4 lg:grid-cols-2">
+          {(['light', 'dark'] as const).map((mode) => (
+            <div class="rounded-xl border border-line bg-bg p-6 text-fg sm:p-8" style={vars(p[mode])}>
+              <div class="flex items-center justify-between border-b border-line pb-4">
+                <span class="font-mono text-step--1 font-medium">
+                  giuz<span class="text-accent">.io</span>
+                </span>
+                <span class="font-mono text-step--1 text-muted">{mode === 'light' ? 'Claro' : 'Oscuro'}</span>
+              </div>
+
+              <p class="mt-8 font-mono text-step--1 text-muted">Desarrollador front-end · Donostia</p>
+              <p class="mt-3 font-heading text-heading-2 leading-[1.05]">
+                Tú diseñas, yo lo construyo <em>bien</em>.
+              </p>
+              <p class="mt-4 text-muted">
+                Sitios rápidos, accesibles y fáciles de mantener para agencias y estudios.{' '}
+                <a href="#" class="text-accent underline">
+                  Ver proyectos
+                </a>
+              </p>
+              <div class="mt-6 flex flex-wrap gap-3">
+                <span class="rounded-md bg-accent px-4 py-2.5 text-step--1 font-medium text-accent-fg">
+                  Cómo trabajo con agencias
+                </span>
+                <span class="rounded-md border border-line px-4 py-2.5 text-step--1 font-medium">Hablemos</span>
+              </div>
+
+              <dl class="mt-8 grid grid-cols-3 gap-2">
+                <div class="rounded-lg border border-line bg-surface p-3">
+                  <dt class="text-step--1 text-muted">Lighthouse</dt>
+                  <dd class="font-mono text-step-1">100</dd>
+                </div>
+                <div class="rounded-lg border border-line bg-surface p-3">
+                  <dt class="text-step--1 text-muted">LCP</dt>
+                  <dd class="font-mono text-step-1">0,8 s</dd>
+                </div>
+                <div class="rounded-lg border border-line bg-surface p-3">
+                  <dt class="text-step--1 text-muted">CLS</dt>
+                  <dd class="font-mono text-step-1">0</dd>
+                </div>
+              </dl>
+
+              <ul class="mt-8 grid grid-cols-3 gap-2 sm:grid-cols-6">
+                {swatchKeys.map((s) => (
+                  <li>
+                    <span
+                      class="block h-10 rounded-md border border-line"
+                      style={`background:${p[mode][s.key]}`}
+                      aria-hidden="true"
+                    />
+                    <span class="mt-1 block text-[0.7rem] leading-tight text-muted">{s.label}</span>
+                    <span class="block font-mono text-[0.7rem] leading-tight">{p.hex[mode][s.key]}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <p class="mt-6 font-mono text-[0.7rem] text-muted">Contraste: {p.contrast[mode]}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))
+  }
+</Base>
