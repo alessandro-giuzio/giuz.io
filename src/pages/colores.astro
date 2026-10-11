@@ -78,6 +78,18 @@ const palettes: Palette[] = [
     },
     contrast: { light: 'Texto 15.9 · Secundario 6.0 · Acento 5.9', dark: 'Texto 16.0 · Secundario 8.0 · Acento 7.9' },
   },
+  {
+    id: 'oxido-neutro',
+    name: '6 · Óxido neutro',
+    note: 'El mismo rojo óxido, pero sobre un blanco roto neutro y un gris carbón en oscuro, sin arena ni marrón. Conserva el carácter de Óxido y deja de recordar a la interfaz de Claude.',
+    light: { bg: 'oklch(98% 0.002 250)', surface: 'oklch(95.5% 0.003 250)', fg: 'oklch(20% 0.006 270)', muted: 'oklch(47% 0.008 270)', line: 'oklch(89% 0.004 250)', accent: 'oklch(50% 0.15 38)', accentFg: 'oklch(98.5% 0.002 250)', mark: 'oklch(50% 0.15 38)' },
+    dark: { bg: 'oklch(17% 0.004 270)', surface: 'oklch(21% 0.005 270)', fg: 'oklch(94% 0.003 250)', muted: 'oklch(72% 0.006 270)', line: 'oklch(31% 0.006 270)', accent: 'oklch(72% 0.14 40)', accentFg: 'oklch(15% 0.004 270)', mark: 'oklch(72% 0.14 40)' },
+    hex: {
+      light: { bg: '#f7f8fa', surface: '#eff0f2', fg: '#151619', muted: '#595b5f', line: '#d9dbdd', accent: '#a73b15', accentFg: '#f9fafb', mark: '#a73b15' },
+      dark: { bg: '#0f0f11', surface: '#17181b', fg: '#eaebed', muted: '#a3a4a8', line: '#2f3033', accent: '#ed835e', accentFg: '#0a0b0d', mark: '#ed835e' },
+    },
+    contrast: { light: 'Texto 17.1 · Secundario 6.5 · Acento 6.1', dark: 'Texto 16.0 · Secundario 7.7 · Acento 7.3' },
+  },
 ];
 
 const vars = (m: Mode) =>
