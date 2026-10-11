@@ -3,33 +3,34 @@
 /*
  * Design tokens.
  * Raw values live on :root (light) and flip under prefers-color-scheme (dark).
- * `@theme inline` exposes them to Tailwind as utilities: bg-bg, text-fg, text-muted,
+ * The @theme inline block exposes them to Tailwind as utilities: bg-bg, text-fg, text-muted,
  * border-line, text-accent, font-mono, text-step-2, etc.
- * Placeholder palette: swap the values once the visual direction is decided.
  */
 :root {
   color-scheme: light dark;
 
-  --bg: oklch(98.5% 0.004 90);
-  --surface: oklch(96% 0.006 90);
-  --fg: oklch(22% 0.01 260);
-  --muted: oklch(48% 0.012 260);
-  --line: oklch(88% 0.008 90);
-  --accent: oklch(52% 0.16 255);
-  --accent-fg: oklch(99% 0 0);
-  --focus: oklch(60% 0.18 255);
+  /* Verde bosque · light. All text pairs pass WCAG AA (text 15.8:1, muted 6.2:1, accent 7.4:1). */
+  --bg: oklch(97% 0.015 110); /* #f5f6eb */
+  --surface: oklch(94% 0.018 110); /* #ebecdf */
+  --fg: oklch(22% 0.025 160); /* #101e17 */
+  --muted: oklch(47% 0.025 160); /* #4f5f56 */
+  --line: oklch(87% 0.02 110); /* #d5d6c7 */
+  --accent: oklch(42% 0.09 160); /* #0c5c3c */
+  --accent-fg: oklch(98% 0.012 110); /* #f9f9f0 */
+  --focus: oklch(52% 0.11 160);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: oklch(17% 0.008 260);
-    --surface: oklch(21% 0.01 260);
-    --fg: oklch(93% 0.006 90);
-    --muted: oklch(70% 0.01 260);
-    --line: oklch(32% 0.01 260);
-    --accent: oklch(74% 0.13 255);
-    --accent-fg: oklch(17% 0.008 260);
-    --focus: oklch(78% 0.14 255);
+    /* Verde bosque · dark (text 16.0:1, muted 7.7:1, accent 10.7:1). */
+    --bg: oklch(17% 0.015 160); /* #0a110d */
+    --surface: oklch(21% 0.02 160); /* #101b15 */
+    --fg: oklch(94% 0.015 110); /* #ebece1 */
+    --muted: oklch(72% 0.02 140); /* #9ea89c */
+    --line: oklch(31% 0.02 160); /* #28342d */
+    --accent: oklch(80% 0.11 155); /* #81d39f */
+    --accent-fg: oklch(17% 0.015 160); /* #0a110d */
+    --focus: oklch(85% 0.12 155);
   }
 }
 
@@ -102,6 +103,7 @@
   /* Italic words inside a heading: the serif's italic is part of the voice. */
   :is(h1, h2, h3) em {
     font-style: italic;
+    color: var(--accent);
   }
 
   p {
