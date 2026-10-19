@@ -11,24 +11,42 @@ export const site = {
   jobTitle: 'Desarrollador front-end',
   tagline: 'Tú diseñas, yo lo construyo bien.',
   description:
-    'Alessandro Giuzio, desarrollador front-end en Donostia. Partner técnico para agencias y estudios: sitios rápidos, accesibles y fáciles de mantener con Astro, WordPress y Vue.',
+    'Desarrollo front-end para agencias y estudios: white-label, revisiones técnicas y bonos de sesiones. Webs rápidas, accesibles y fáciles de mantener.',
   location: {
     city: 'Donostia-San Sebastián',
     region: 'Gipuzkoa',
     country: 'ES',
   },
   languages: ['es', 'en', 'it'],
-  // TODO: create the mailbox (Cloudflare Email Routing) before launch.
+  // Fixed, unhashed photo URL for schema.org Person.image (and other sites' profiles).
+  // The page itself renders the optimized copy in src/assets/alessandro.webp.
+  photo: '/alessandro-giuzio.jpg',
+  // Licence for the site's texts (aviso legal §3). Design, code, logo and photos are not covered.
+  license: 'https://creativecommons.org/licenses/by/4.0/',
+  // Cloudflare Email Routing forwards it to hola@agencyga.es (Namecheap Private Email).
   email: 'hola@giuz.io',
   // TODO: add the booking link for the 20-minute intro call (Cal.com or similar).
   bookingUrl: '',
+  // Holder data for the legal pages (LSSI-CE art. 10). Same holder as agencyga.es.
+  legal: {
+    holder: 'Alessandro Giuzio, profesional autónomo',
+    nif: 'X9612810Y',
+    address: 'Zarautz Kalea, 132, 20018 Donostia-San Sebastián, Gipuzkoa',
+    updated: '16 de octubre de 2026',
+  },
   studio: {
-    name: 'AgencyGA',
-    url: 'https://www.agencyga.es/',
+    name: 'Agency-GA',
+    url: 'https://agencyga.es/',
+    // Organization @id exactly as agencyga.es declares it (www form, though the site itself is served on the apex).
+    id: 'https://www.agencyga.es/#organization',
   },
   // Profiles that identify the same person. Feeds schema.org `sameAs`.
-  // TODO: add the LinkedIn profile URL.
-  sameAs: ['https://github.com/alessandro-giuzio', 'https://www.agencyga.es/'],
+  sameAs: [
+    'https://www.linkedin.com/in/alessandrogiuzio/',
+    'https://github.com/alessandro-giuzio',
+    'https://twitter.com/giuzioale',
+    'https://agencyga.es/',
+  ],
 } as const;
 
 /** Single-page site: the main nav jumps to sections of the landing page. */
@@ -43,6 +61,7 @@ export const legalNav = [
   { href: '/aviso-legal/', label: 'Aviso legal' },
   { href: '/privacidad/', label: 'Privacidad' },
   { href: '/cookies/', label: 'Cookies' },
+  { href: '/llms.txt', label: 'llms.txt' },
 ] as const;
 
 /** Stable @id for the Person node, shared with agencyga.es as `founder`. */

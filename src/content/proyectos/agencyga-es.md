@@ -1,10 +1,10 @@
 ---
 title: agencyga.es
-description: Rediseño técnico del sitio de AgencyGA con Astro, Tailwind v4 y un grafo SEO completo.
-client: AgencyGA
+description: Rediseño técnico del sitio de Agency-GA con Astro, Tailwind v4 y un grafo SEO completo.
+client: Agency-GA
 year: 2026
 stack: [Astro, Tailwind CSS v4, Netlify]
-url: https://www.agencyga.es/
+url: https://agencyga.es/
 results: []
 order: 1
 draft: true

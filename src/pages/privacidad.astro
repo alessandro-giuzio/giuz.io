@@ -1,11 +1,72 @@
 ---
 import Base from '@/layouts/Base.astro';
-import Pending from '@/components/Pending.astro';
+import { site } from '@/site.config';
 ---
 
 <Base title="Política de privacidad" noindex>
-  <article class="prose space-y-4">
+  <article class="prose">
     <h1 class="text-heading-2">Política de privacidad</h1>
-    <Pending what="responsable, finalidad, base legal y derechos (RGPD)." />
+    <p class="text-muted">Última actualización: {site.legal.updated}.</p>
+
+    <p>
+      Corto: esta web no tiene formularios, analítica ni publicidad. Solo trato tus datos si me escribes por correo, y
+      solo para contestarte.
+    </p>
+
+    <h2>Responsable</h2>
+    <ul>
+      <li>{site.legal.holder}.</li>
+      <li>NIF: {site.legal.nif}.</li>
+      <li>Domicilio: {site.legal.address}.</li>
+      <li>Correo electrónico: <a href={`mailto:${site.email}`}>{site.email}</a>.</li>
+    </ul>
+
+    <h2>Si me escribes</h2>
+    <ul>
+      <li>Datos: tu dirección de correo, tu nombre y lo que me cuentes en el mensaje.</li>
+      <li>Para qué: contestarte y, si me pides un presupuesto, preparártelo.</li>
+      <li>
+        Base legal: tu consentimiento al escribirme y, si hablamos de un encargo, la aplicación de medidas
+        precontractuales (artículo 6.1.a y 6.1.b del RGPD).
+      </li>
+      <li>
+        Cuánto tiempo: mientras dure la conversación. Si después hay un encargo, el tiempo que exijan las obligaciones
+        fiscales y legales.
+      </li>
+    </ul>
+
+    <h2>Al visitar la web</h2>
+    <p>
+      No uso cookies ni analítica, y no creo perfiles de quien visita la web. Las fuentes tipográficas se sirven desde
+      giuz.io, sin llamadas a Google ni a otros servicios.
+    </p>
+    <p>
+      Para servir la web y protegerla frente a ataques, el proveedor de alojamiento procesa de forma técnica datos como tu
+      dirección IP. La base legal es el interés legítimo en que la web funcione y sea segura (artículo 6.1.f del RGPD).
+    </p>
+
+    <h2>Proveedores que acceden a los datos</h2>
+    <ul>
+      <li>Cloudflare, Inc. (Estados Unidos): aloja la web y reenvía el correo de {site.email}.</li>
+      <li>Namecheap, Inc. (Estados Unidos), con su servicio Private Email: el buzón donde recibo ese correo.</li>
+    </ul>
+    <p>
+      Las transferencias a Estados Unidos se amparan en el Marco de Privacidad de Datos UE-EE. UU. o en las cláusulas
+      contractuales tipo de la Comisión Europea. No cedo tus datos a nadie más, salvo obligación legal.
+    </p>
+
+    <h2>Tus derechos</h2>
+    <p>
+      Puedes pedirme el acceso, la rectificación o la supresión de tus datos, oponerte a su tratamiento, limitarlo,
+      solicitar su portabilidad y retirar tu consentimiento. Escríbeme a <a href={`mailto:${site.email}`}>{site.email}</a> con
+      el asunto «Protección de datos».
+    </p>
+    <p>
+      Si crees que no he tratado bien tus datos, puedes reclamar ante la
+      <a href="https://www.aepd.es/">Agencia Española de Protección de Datos</a>.
+    </p>
+
+    <h2>Menores</h2>
+    <p>Esta web no se dirige a menores de 14 años.</p>
   </article>
 </Base>

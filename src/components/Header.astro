@@ -1,6 +1,9 @@
 ---
-import { nav, site } from '@/site.config';
+import { site } from '@/site.config';
+import { getNav } from '@/lib/nav';
 import ThemeToggle from '@/components/ThemeToggle.astro';
+
+const nav = await getNav();
 ---
 
 <header class="border-b border-line">

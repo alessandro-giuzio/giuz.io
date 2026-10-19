@@ -3,53 +3,95 @@
  * The whole site is this landing page. Sections, in order:
  * hero → problema → servicios → proyectos → proceso → sobre-mi (+ FAQ) → contacto.
  * Nav links in site.config.ts point at the section ids below; keep them in sync.
+ * #proyectos only renders once a case study is published (src/lib/nav.ts hides its nav link too).
  */
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '@/layouts/Base.astro';
-import Pending from '@/components/Pending.astro';
-import { site } from '@/site.config';
+import { site, personId } from '@/site.config';
+import foto from '@/assets/alessandro.webp';
+import { servicios, faq, herramientas } from '@/data/landing';
 
 const proyectos = (await getCollection('proyectos', ({ data }) => !data.draft))
   .sort((a, b) => a.data.order - b.data.order || b.data.year - a.data.year)
   .slice(0, 3);
 
-const servicios = [
+const problemas = [
   {
-    id: 'revision',
-    name: 'Revisión técnica',
-    tag: 'Para empezar',
-    pending: 'qué revisas (rendimiento, accesibilidad WCAG AA, SEO técnico, estructura), qué entregas, plazo y precio fijo.',
+    name: 'La web no se parece al diseño',
+    text: 'Espaciados, tipografías y estados que se pierden entre Figma y el navegador. El cliente lo nota aunque no sepa decir qué es.',
   },
   {
-    id: 'white-label',
-    name: 'Desarrollo white-label',
-    tag: 'Por proyecto',
-    pending: 'construcción en Astro, WordPress o Vue con el nombre de la agencia, NDA y entregables.',
+    name: 'Es lenta',
+    text: 'Imágenes enormes, plantillas pesadas y scripts que nadie usa. Google lo mide con las Core Web Vitals, y los visitantes se van antes de que cargue.',
   },
   {
-    id: 'sesiones',
-    name: 'Bono de sesiones',
-    tag: 'Flexible',
-    pending: 'paquete de sesiones para consultoría, correcciones o desarrollo, sin permanencia.',
+    name: 'No es accesible',
+    text: 'Poco contraste, formularios sin etiquetas, menús que no funcionan con teclado. Deja fuera a personas y, para tiendas online y otros servicios, ya es una obligación legal desde junio de 2025.',
+  },
+  {
+    name: 'Nadie quiere tocar el código',
+    text: 'Cada cambio pequeño rompe otra cosa, y el proyecto acaba dependiendo de quien lo hizo.',
   },
 ];
 
 const pasos = [
-  { n: '01', name: 'Llamada de 20 minutos', pending: 'conocernos y ver si encajamos.' },
-  { n: '02', name: 'Revisión técnica', pending: 'reviso un proyecto real y os doy un informe.' },
-  { n: '03', name: 'Colaboración', pending: 'proyectos, bonos de sesiones o soporte continuo.' },
+  {
+    n: '01',
+    name: 'Llamada de 20 minutos',
+    text: 'Me escribís, buscamos un hueco y vemos qué necesitáis y si encajamos. Sin compromiso.',
+  },
+  {
+    n: '02',
+    name: 'Revisión técnica',
+    text: 'Reviso un proyecto real vuestro. En dos días laborables tenéis el informe, y yo conozco cómo trabajáis.',
+  },
+  {
+    n: '03',
+    name: 'Colaboración',
+    text: 'Si os convence, seguimos con proyectos white-label, un bono de sesiones o las dos cosas.',
+  },
 ];
 
-const faq = [
-  '¿Trabajas solo?',
-  '¿Qué pasa si te pones enfermo o no estás disponible?',
-  '¿Puedes trabajar sin que nuestro cliente sepa que existes?',
-  '¿Qué pasa con el código si dejamos de trabajar juntos?',
-  '¿Cobras por horas o por proyecto?',
+// schema.org: the three services and the FAQ, built from the same data the page renders.
+const pageUrl = `${site.url}/`;
+const schema: Record<string, unknown>[] = [
+  // Link the Person to the services, so the graph reads both ways.
+  { '@id': personId, hasOfferCatalog: { '@id': `${pageUrl}#servicios` } },
+  {
+    '@type': 'OfferCatalog',
+    '@id': `${pageUrl}#servicios`,
+    name: 'Servicios para agencias y estudios',
+    itemListElement: servicios.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@id': `${pageUrl}#${s.id}` },
+    })),
+  },
+  ...servicios.map((s) => ({
+    '@type': 'Service',
+    '@id': `${pageUrl}#${s.id}`,
+    name: s.name,
+    description: `${s.intro} ${s.meta}`,
+    serviceType: s.name,
+    provider: { '@id': personId },
+    areaServed: { '@type': 'Country', name: 'España' },
+    audience: { '@type': 'BusinessAudience', audienceType: 'Agencias, estudios de diseño y diseñadores' },
+    url: `${pageUrl}#${s.id}`,
+  })),
+  {
+    '@type': 'FAQPage',
+    '@id': `${pageUrl}#faq`,
+    isPartOf: { '@id': `${pageUrl}#webpage` },
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  },
 ];
 ---
 
-<Base>
+<Base schema={schema}>
   <!-- Hero -->
   <section class="max-w-(--container-prose) space-y-6 pt-4 sm:pt-10" aria-labelledby="hero-title">
     <p class="font-mono text-step--1 text-muted">{site.jobTitle} · {site.location.city}</p>
@@ -72,9 +114,19 @@ const faq = [
   <section id="problema" class="section" aria-labelledby="problema-title">
     <p class="eyebrow">El problema</p>
     <h2 id="problema-title" class="text-heading-2">Cuando el diseño enamora, pero la web no está a la altura</h2>
-    <div class="mt-6 max-w-(--container-prose)">
-      <Pending what="los 3–4 problemas típicos de una agencia: webs lentas, fallos de accesibilidad, código que nadie quiere tocar, entregas que no se parecen al diseño." />
-    </div>
+    <p class="mt-6 max-w-(--container-prose) text-step-1 text-muted">
+      Vosotros cuidáis la marca, el diseño y la relación con el cliente. Lo que suele fallar viene después:
+    </p>
+    <ul class="mt-8 grid max-w-(--container-page) gap-6 sm:grid-cols-2">
+      {
+        problemas.map((p) => (
+          <li class="space-y-2 border-t border-line pt-4">
+            <h3 class="text-heading-3">{p.name}</h3>
+            <p class="text-muted">{p.text}</p>
+          </li>
+        ))
+      }
+    </ul>
   </section>
 
   <!-- Servicios -->
@@ -87,23 +139,31 @@ const faq = [
           <li id={s.id} class="flex flex-col gap-3 rounded-lg border border-line bg-surface p-6">
             <p class="font-mono text-step--1 text-accent">{s.tag}</p>
             <h3 class="text-heading-3">{s.name}</h3>
-            <Pending what={s.pending} />
+            <p>{s.intro}</p>
+            <ul class="list-disc space-y-1 pl-5 text-step--1 text-muted">
+              {s.items.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+            <p class="mt-auto border-t border-line pt-3 text-step--1">{s.meta}</p>
           </li>
         ))
       }
     </ul>
+    <p class="mt-6 max-w-(--container-prose) text-muted">
+      No publico precios porque cada encargo es distinto. Después de una primera conversación os doy un precio cerrado,
+      sin sorpresas.
+    </p>
   </section>
 
-  <!-- Proyectos -->
-  <section id="proyectos" class="section" aria-labelledby="proyectos-title">
-    <p class="eyebrow">Proyectos</p>
-    <h2 id="proyectos-title" class="text-heading-2">Trabajo reciente</h2>
-    {
-      proyectos.length === 0 ? (
-        <div class="mt-8">
-          <Pending what="2–3 casos con resultados medibles. Se publican poniendo draft: false en src/content/proyectos/*.md." />
-        </div>
-      ) : (
+  <!-- Proyectos: hidden until a case study has draft: false -->
+  {
+    proyectos.length > 0 && (
+      <section id="proyectos" class="section" aria-labelledby="proyectos-title">
+        <p class="eyebrow">Proyectos</p>
+        <h2 id="proyectos-title" class="text-heading-2">
+          Trabajo reciente
+        </h2>
         <ul class="mt-8 grid gap-4 md:grid-cols-3">
           {proyectos.map((p) => (
             <li class="flex flex-col gap-2 rounded-lg border border-line p-6">
@@ -129,13 +189,13 @@ const faq = [
             </li>
           ))}
         </ul>
-      )
-    }
-  </section>
+      </section>
+    )
+  }
 
   <!-- Proceso -->
   <section id="proceso" class="section" aria-labelledby="proceso-title">
-    <p class="eyebrow">Cómo trabajamos</p>
+    <p class="eyebrow">Proceso</p>
     <h2 id="proceso-title" class="text-heading-2">Tres pasos, sin reuniones infinitas</h2>
     <ol class="mt-8 grid gap-6 md:grid-cols-3">
       {
@@ -143,7 +203,7 @@ const faq = [
           <li class="space-y-2 border-t border-line pt-4">
             <p class="font-mono text-step--1 text-accent">{p.n}</p>
             <h3 class="text-heading-3">{p.name}</h3>
-            <Pending what={p.pending} />
+            <p class="text-muted">{p.text}</p>
           </li>
         ))
       }
@@ -154,26 +214,61 @@ const faq = [
   <section id="sobre-mi" class="section" aria-labelledby="sobre-mi-title">
     <p class="eyebrow">Sobre mí</p>
     <h2 id="sobre-mi-title" class="text-heading-2">Quién está detrás</h2>
-    <div class="mt-6 max-w-(--container-prose)">
-      <Pending what="foto, trayectoria breve, cómo trabajo, idiomas (español, inglés, italiano) y relación con AgencyGA." />
+    <div class="mt-6 grid gap-8 md:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] md:items-start">
+      <Image
+        src={foto}
+        alt={`${site.name}, sonriendo.`}
+        widths={[256, 512]}
+        sizes="(min-width: 768px) 16rem, 60vw"
+        class="h-auto w-3/5 max-w-64 md:w-full"
+      />
+      <div class="max-w-(--container-prose) space-y-4">
+        <p class="text-step-1">
+          Soy Alessandro, desarrollador front-end en Donostia. Empecé a hacer webs con FrontPage y desde 2019 trabajo
+          como autónomo.
+        </p>
+        <p class="text-muted">
+          Me importa la parte del trabajo que no se ve: que la web cargue rápido, que se pueda usar con teclado o lector
+          de pantalla y que la próxima persona que abra el código lo entienda.
+        </p>
+        <p class="text-muted">
+          Trabajo solo, de principio a fin. Hablo español, inglés e italiano, así que también puedo colaborar con
+          equipos y clientes de fuera.
+        </p>
+        <p class="text-muted">
+          Para pequeños negocios de Gipuzkoa tengo mi estudio local, <a href={site.studio.url} class="text-accent underline"
+            >{site.studio.name}</a
+          >. Aquí, en giuz.io, trabajo con agencias y estudios.
+        </p>
+      </div>
     </div>
+
+    <h3 id="herramientas" class="mt-12 text-heading-3">Con qué trabajo</h3>
+    <dl class="mt-4 max-w-(--container-prose) divide-y divide-line border-y border-line">
+      {
+        herramientas.map((h) => (
+          <div class="grid gap-1 py-3 sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-4">
+            <dt class="font-mono text-step--1 text-accent">{h.area}</dt>
+            <dd>{h.tools.join(' · ')}</dd>
+          </div>
+        ))
+      }
+    </dl>
 
     <h3 id="faq" class="mt-12 text-heading-3">Preguntas que las agencias suelen hacerse</h3>
     <div class="mt-4 max-w-(--container-prose) divide-y divide-line border-y border-line">
       {
-        faq.map((q) => (
+        faq.map((item) => (
           <details class="group py-4">
             <summary class="cursor-pointer list-none font-medium marker:hidden">
               <span class="flex items-center justify-between gap-4">
-                {q}
+                {item.q}
                 <span class="font-mono text-muted transition-transform group-open:rotate-45" aria-hidden="true">
                   +
                 </span>
               </span>
             </summary>
-            <div class="pt-3">
-              <Pending what="respuesta." />
-            </div>
+            <p class="pt-3 text-muted">{item.a}</p>
           </details>
         ))
       }
@@ -185,19 +280,19 @@ const faq = [
     <p class="eyebrow">Contacto</p>
     <h2 id="contacto-title" class="text-heading-2">Hablemos de vuestro próximo proyecto</h2>
     <div class="mt-6 max-w-(--container-prose) space-y-4">
-      <p class="text-step-1 text-muted">Contadme en qué estáis trabajando y vemos si encajamos.</p>
+      <p class="text-step-1 text-muted">
+        Contadme en qué estáis trabajando y vemos si encajamos. Os contesto yo, en uno o dos días laborables.
+      </p>
       <p class="text-step-1">
         <a href={`mailto:${site.email}`} class="text-accent underline">{site.email}</a>
       </p>
       {
-        site.bookingUrl ? (
+        site.bookingUrl && (
           <p>
             <a href={site.bookingUrl} class="rounded-md bg-accent px-5 py-3 font-medium text-accent-fg no-underline hover:opacity-90">
               Reservar una llamada de 20 minutos
             </a>
           </p>
-        ) : (
-          <Pending what="enlace de reserva para la llamada de 20 minutos (site.config.ts → bookingUrl)." />
         )
       }
     </div>

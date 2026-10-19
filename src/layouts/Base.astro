@@ -4,6 +4,7 @@ import '@/styles/global.css';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 import { site, personId, websiteId } from '@/site.config';
+import { knowsAbout } from '@/data/landing';
 
 interface Props {
   /** Page title without the site name. Omit on the home page. */
@@ -20,10 +21,10 @@ const { title, description = site.description, noindex = false, ogType = 'websit
 
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.jobTitle}`;
 const canonical = new URL(Astro.url.pathname, site.url).href;
+// Indexable pages allow full snippets and large image previews (search and AI answers).
+const robots = noindex ? 'noindex, follow' : 'max-snippet:-1, max-image-preview:large, max-video-preview:-1';
 
-const graph = {
-  '@context': 'https://schema.org',
-  '@graph': [
+const nodes: Record<string, unknown>[] = [
     {
       '@type': 'Person',
       '@id': personId,
@@ -31,7 +32,9 @@ const graph = {
       url: `${site.url}/`,
       jobTitle: site.jobTitle,
       email: `mailto:${site.email}`,
+      image: new URL(site.photo, site.url).href,
       knowsLanguage: site.languages,
+      knowsAbout,
       address: {
         '@type': 'PostalAddress',
         addressLocality: site.location.city,
@@ -41,6 +44,7 @@ const graph = {
       sameAs: site.sameAs,
       worksFor: {
         '@type': 'Organization',
+        '@id': site.studio.id,
         name: site.studio.name,
         url: site.studio.url,
       },
@@ -52,6 +56,7 @@ const graph = {
       name: site.name,
       inLanguage: site.lang,
       publisher: { '@id': personId },
+      license: site.license,
     },
     {
       '@type': 'WebPage',
@@ -63,9 +68,15 @@ const graph = {
       isPartOf: { '@id': websiteId },
       about: { '@id': personId },
     },
-    ...schema,
-  ],
-};
+];
+
+// Page nodes that reuse an @id from above (e.g. the Person) add properties to that node instead of duplicating it.
+for (const node of schema) {
+  const existing = nodes.find((n) => n['@id'] && n['@id'] === node['@id']);
+  if (existing) Object.assign(existing, node);
+  else nodes.push(node);
+}
+const graph = { '@context': 'https://schema.org', '@graph': nodes };
 ---
 
 <!doctype html>
@@ -82,8 +93,9 @@ const graph = {
     </script>
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
-    {noindex && <meta name="robots" content="noindex, follow" />}
+    <!-- Google: no canonical on noindex pages. -->
+    {!noindex && <link rel="canonical" href={canonical} />}
+    <meta name="robots" content={robots} />
 
     <!-- Self-hosted fonts. Preload only what the first screen needs: body text and headings. -->
     <Font cssVariable="--font-inter" preload />

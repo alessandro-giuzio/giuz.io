@@ -1,11 +1,56 @@
 ---
 import Base from '@/layouts/Base.astro';
-import Pending from '@/components/Pending.astro';
+import { site } from '@/site.config';
 ---
 
 <Base title="Aviso legal" noindex>
-  <article class="prose space-y-4">
+  <article class="prose">
     <h1 class="text-heading-2">Aviso legal</h1>
-    <Pending what="titular, NIF, domicilio y contacto (LSSI-CE art. 10)." />
+    <p class="text-muted">Última actualización: {site.legal.updated}.</p>
+
+    <h2>1. Quién está detrás de esta web</h2>
+    <p>En cumplimiento del artículo 10 de la Ley 34/2002 (LSSI-CE), estos son los datos del titular de giuz.io:</p>
+    <ul>
+      <li>Titular: {site.legal.holder}.</li>
+      <li>NIF: {site.legal.nif}.</li>
+      <li>Domicilio: {site.legal.address}.</li>
+      <li>Correo electrónico: <a href={`mailto:${site.email}`}>{site.email}</a>.</li>
+    </ul>
+
+    <h2>2. Para qué sirve</h2>
+    <p>
+      giuz.io presenta mis servicios de desarrollo web para agencias, estudios y diseñadores. Esta web no permite
+      contratar ni pagar nada online. Las condiciones de cada encargo, incluido el precio, se fijan en el presupuesto que
+      se acepta antes de empezar.
+    </p>
+
+    <h2 id="licencia">3. Propiedad intelectual y uso por IA</h2>
+    <p>
+      Los textos de giuz.io se publican bajo licencia
+      <a href="https://creativecommons.org/licenses/by/4.0/deed.es">Creative Commons Atribución 4.0</a>. Puedes
+      copiarlos, adaptarlos y usarlos, también con fines comerciales o en modelos de IA, siempre que cites giuz.io como
+      fuente, con enlace cuando el formato lo permita, y no cambies su sentido.
+    </p>
+    <p>
+      El diseño, el código, el logotipo y las fotografías no entran en esta licencia: son míos y necesitan permiso.
+    </p>
+
+    <h2>4. Enlaces a otras webs</h2>
+    <p>
+      Esta web enlaza a sitios de terceros, como perfiles profesionales o proyectos. No controlo su contenido ni respondo
+      de él.
+    </p>
+
+    <h2>5. Responsabilidad</h2>
+    <p>
+      Intento que la información de esta web sea correcta y esté al día, pero puede cambiar sin aviso. Lo que vale para
+      cada encargo es lo que figura en su presupuesto.
+    </p>
+
+    <h2>6. Ley aplicable</h2>
+    <p>
+      Estas condiciones se rigen por la legislación española. Para cualquier conflicto, las partes se someten a los
+      juzgados y tribunales de Donostia-San Sebastián, salvo que la ley reconozca otro fuero.
+    </p>
   </article>
 </Base>

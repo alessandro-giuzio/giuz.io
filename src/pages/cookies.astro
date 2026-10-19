@@ -1,11 +1,33 @@
 ---
 import Base from '@/layouts/Base.astro';
-import Pending from '@/components/Pending.astro';
+import { site } from '@/site.config';
 ---
 
 <Base title="Política de cookies" noindex>
-  <article class="prose space-y-4">
+  <article class="prose">
     <h1 class="text-heading-2">Política de cookies</h1>
-    <Pending what="el sitio no usa cookies propias ni de terceros; confirmar si se añade analítica." />
+    <p class="text-muted">Última actualización: {site.legal.updated}.</p>
+
+    <p>
+      Esta web no usa cookies, ni propias ni de terceros. No hay analítica, publicidad ni botones de redes sociales que
+      te sigan. Por eso no ves ningún aviso de cookies.
+    </p>
+
+    <h2>Lo único que se guarda en tu navegador</h2>
+    <p>
+      Si pulsas el botón de tema claro u oscuro, tu navegador guarda tu elección en su almacenamiento local
+      (<code>localStorage</code>), con la clave <code>theme</code> y el valor <code>light</code> o <code>dark</code>.
+      Sirve para que la web se vea igual en tu próxima visita. Nunca sale de tu navegador y yo no lo veo.
+    </p>
+    <p>
+      Como lo pides tú al pulsar el botón y solo sirve para eso, no necesita consentimiento (artículo 22.2 de la
+      LSSI-CE). Puedes borrarlo cuando quieras eliminando los datos de este sitio en tu navegador.
+    </p>
+
+    <h2>Si esto cambia</h2>
+    <p>
+      Si algún día añado algo que necesite tu consentimiento, actualizaré esta página y te lo pediré antes de instalarlo.
+      Para cualquier duda, escríbeme a <a href={`mailto:${site.email}`}>{site.email}</a>.
+    </p>
   </article>
 </Base>

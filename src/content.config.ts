@@ -6,8 +6,9 @@ import { z } from 'astro/zod';
 const proyectos = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/proyectos' }),
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
+    // Bounds keep titles and meta descriptions inside what search results show.
+    title: z.string().min(5).max(120),
+    description: z.string().min(15).max(160),
     client: z.string(),
     year: z.number().int(),
     stack: z.array(z.string()).default([]),
@@ -24,8 +25,9 @@ const proyectos = defineCollection({
 const notas = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/notas' }),
   schema: z.object({
-    title: z.string(),
-    description: z.string(),
+    // Bounds keep titles and meta descriptions inside what search results show.
+    title: z.string().min(5).max(120),
+    description: z.string().min(15).max(160),
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).default([]),

@@ -1,11 +1,14 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { nav, site } from '@/site.config';
+import { site } from '@/site.config';
+import { getNav } from '@/lib/nav';
+import { servicios, herramientas } from '@/data/landing';
 
 /** llms.txt: a plain-text summary of who this is and where things live, for AI crawlers. */
 export const GET: APIRoute = async () => {
   const proyectos = await getCollection('proyectos', ({ data }) => !data.draft);
   const notas = await getCollection('notas', ({ data }) => !data.draft);
+  const nav = await getNav();
   const abs = (path: string) => new URL(path, site.url).href;
 
   const lines = [
@@ -14,6 +17,18 @@ export const GET: APIRoute = async () => {
     `> ${site.description}`,
     '',
     `${site.name} is a front-end developer based in ${site.location.city}, Spain. He works as a technical partner for agencies, design studios and designers, and runs the local web studio ${site.studio.name} (${site.studio.url}). Languages: Spanish, English, Italian.`,
+    '',
+    `Licence: texts are CC BY 4.0 (${site.license}). Use them, also in AI models, crediting giuz.io with a link. Design, code, logo and photos are not covered.`,
+    '',
+    '## Services',
+    '',
+    'Prices are not published: each job gets a fixed quote after a first conversation by email.',
+    '',
+    ...servicios.map((s) => `- [${s.name}](${abs(`/#${s.id}`)}): ${s.intro} ${s.meta}`),
+    '',
+    '## Tools',
+    '',
+    ...herramientas.map((h) => `- ${h.area}: ${h.tools.join(', ')}`),
     '',
     '## Pages',
     '',
