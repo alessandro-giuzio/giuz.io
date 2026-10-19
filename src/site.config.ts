@@ -21,6 +21,13 @@ export const site = {
   // Fixed, unhashed photo URL for schema.org Person.image (and other sites' profiles).
   // The page itself renders the optimized copy in src/assets/alessandro.webp.
   photo: '/alessandro-giuzio.jpg',
+  // Social preview card (1200×630) for every page. Replace the file to change it.
+  ogImage: {
+    src: '/og.jpg',
+    width: 1200,
+    height: 630,
+    alt: 'Tú diseñas, yo lo construyo bien. Alessandro Giuzio, desarrollo front-end para agencias y estudios.',
+  },
   // Licence for the site's texts (aviso legal §3). Design, code, logo and photos are not covered.
   license: 'https://creativecommons.org/licenses/by/4.0/',
   // Cloudflare Email Routing forwards it to hola@agencyga.es (Namecheap Private Email).
