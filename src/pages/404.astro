@@ -3,9 +3,318 @@ import Base from '@/layouts/Base.astro';
 ---
 
 <Base title="Página no encontrada" noindex>
-  <div class="max-w-(--container-prose) space-y-6">
-    <p class="font-mono text-step--1 text-muted">404</p>
-    <h1 class="text-heading-1">Esta página no existe.</h1>
-    <p><a href="/" class="text-accent underline">Volver al inicio</a></p>
+  <svg class="lines" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <path d="M-100 820 C 300 380, 900 260, 1540 420" />
+    <path d="M-100 160 C 420 520, 1000 600, 1540 300" />
+    <path d="M300 -60 C 380 360, 700 760, 1240 960" />
+    <path class="lines-accent" d="M1500 80 C 1040 220, 620 560, -60 640" />
+  </svg>
+
+  <div class="relative z-1 mx-auto flex max-w-(--container-prose) flex-col items-center py-8 text-center sm:py-16">
+    <p class="digits font-heading" aria-hidden="true">
+      <span class="digit">4</span><em class="digit">0</em><span class="digit">4</span>
+    </p>
+
+    <div class="content mt-8 space-y-4">
+      <h1 class="text-heading-2">Esta página no existe.</h1>
+      <p class="text-muted">Puede que la haya movido o que nunca haya existido.</p>
+    </div>
+
+    <ul class="content mt-10 flex flex-wrap justify-center gap-x-8 gap-y-4 font-mono text-step--1 uppercase">
+      <li>
+        <a href="/" class="link">Volver al inicio <span aria-hidden="true">→</span></a>
+      </li>
+      <li>
+        <a href="/#proyectos" class="link">Ver proyectos <span aria-hidden="true">→</span></a>
+      </li>
+    </ul>
+
+    <!-- Hold-to-blast toy, CSS only via :active. The empty ontouchstart makes iOS Safari apply :active on touch. -->
+    <button type="button" class="blast content mt-20 font-mono text-step--1 uppercase text-muted" ontouchstart="">
+      Mantén pulsado para romperla <span aria-hidden="true">💥</span>
+    </button>
   </div>
 </Base>
+
+<style>
+  /* Decorative curves behind the page, a nod to trionn.com/404 without the WebGL. */
+  .lines {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1.25;
+  }
+
+  .lines-accent {
+    stroke: var(--accent);
+    opacity: 0.35;
+  }
+
+  .digits {
+    font-size: clamp(7rem, 28vw, 16rem);
+    line-height: 1;
+    perspective: 800px;
+  }
+
+  .digit {
+    display: inline-block;
+    /* Stacked shadows fake an extruded, 3D numeral in the digit's own colour. */
+    text-shadow:
+      1px 1px 0 color-mix(in oklch, currentColor 30%, transparent),
+      2px 2px 0 color-mix(in oklch, currentColor 24%, transparent),
+      3px 3px 0 color-mix(in oklch, currentColor 18%, transparent),
+      4px 4px 0 color-mix(in oklch, currentColor 12%, transparent),
+      6px 8px 18px color-mix(in oklch, currentColor 10%, transparent);
+  }
+
+  .digits em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .link {
+    display: inline-flex;
+    gap: 2.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    transition: border-color 0.2s;
+
+    &:hover {
+      border-color: var(--accent);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .lines path {
+      stroke-dasharray: 2400;
+      animation:
+        draw 2.4s cubic-bezier(0.65, 0, 0.35, 1) backwards,
+        drift 20s ease-in-out 2.4s infinite alternate;
+    }
+
+    .lines path:nth-child(2) {
+      animation-delay: 0.2s, 2.6s;
+    }
+
+    .lines path:nth-child(3) {
+      animation-delay: 0.4s, 2.8s;
+    }
+
+    .lines path:nth-child(4) {
+      animation-delay: 0.6s, 3s;
+    }
+
+    .digits {
+      animation: sway 8s ease-in-out 1.2s infinite alternate;
+      transform-style: preserve-3d;
+    }
+
+    .digit {
+      animation: rise 1s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    }
+
+    .digit:nth-child(2) {
+      animation-delay: 0.08s;
+    }
+
+    .digit:nth-child(3) {
+      animation-delay: 0.16s;
+    }
+
+    .content {
+      animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.5s backwards;
+    }
+
+    ul.content {
+      animation-delay: 0.65s;
+    }
+
+    .blast.content {
+      animation-delay: 0.8s;
+    }
+
+    /* Hold to blast: the page shakes harder while held, then the digits burst after 1.5 s.
+       Releasing drops :active, so everything snaps back and the digits rise in again. */
+    .blast {
+      position: relative;
+      display: inline-block;
+      padding-bottom: 0.35rem;
+      cursor: pointer;
+      user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: manipulation;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: auto 0 0;
+        height: 1px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+      }
+
+      &:active::after {
+        transform: scaleX(1);
+        transition: transform 1.5s linear;
+      }
+    }
+
+    :global(html:has(.blast:active)) {
+      overflow-x: clip;
+    }
+
+    /* Earthquake: translate and rotate run on separate properties with periods that don't
+       line up, so the combined motion never settles into an obvious rhythm. */
+    :global(body:has(.blast:active)) {
+      animation:
+        quake-build 1.5s linear,
+        quake 0.41s linear 1.5s infinite,
+        tilt-soft 0.31s linear 0.6s 3,
+        tilt 0.23s linear 1.5s infinite;
+    }
+
+    :global(body:has(.blast:active)) .lines {
+      animation: quake 0.37s linear 0.4s infinite reverse;
+    }
+
+    :global(body:has(.blast:active)) .digit {
+      animation: burst-left 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) 1.5s forwards;
+    }
+
+    :global(body:has(.blast:active)) .digit:nth-child(2) {
+      animation-name: burst-up;
+    }
+
+    :global(body:has(.blast:active)) .digit:nth-child(3) {
+      animation-name: burst-right;
+    }
+  }
+
+  /* Without motion there is no blast, so the button would do nothing: hide it. */
+  @media (prefers-reduced-motion: reduce) {
+    .blast {
+      display: none;
+    }
+  }
+
+  @keyframes quake-build {
+    5% { translate: 1px 0; }
+    11% { translate: -1px 1px; }
+    16% { translate: 0 -1px; }
+    23% { translate: 2px 1px; }
+    28% { translate: -1px -2px; }
+    34% { translate: -2px 1px; }
+    41% { translate: 3px -1px; }
+    47% { translate: 1px 3px; }
+    52% { translate: -3px -2px; }
+    58% { translate: 4px 1px; }
+    64% { translate: -2px 4px; }
+    69% { translate: -5px -3px; }
+    75% { translate: 5px -4px; }
+    81% { translate: 2px 6px; }
+    86% { translate: -7px 2px; }
+    92% { translate: 6px -6px; }
+    97% { translate: -4px 7px; }
+  }
+
+  @keyframes quake {
+    0% { translate: 0 0; }
+    9% { translate: -9px 4px; }
+    18% { translate: 7px -11px; }
+    27% { translate: 12px 6px; }
+    36% { translate: -5px 10px; }
+    45% { translate: -12px -7px; }
+    54% { translate: 4px -3px; }
+    63% { translate: 10px 12px; }
+    72% { translate: -8px -12px; }
+    81% { translate: 6px 9px; }
+    90% { translate: -11px 2px; }
+    100% { translate: 0 0; }
+  }
+
+  @keyframes tilt-soft {
+    25% { rotate: 0.3deg; }
+    75% { rotate: -0.25deg; }
+  }
+
+  @keyframes tilt {
+    0% { rotate: 0deg; }
+    20% { rotate: -0.8deg; }
+    45% { rotate: 0.6deg; }
+    70% { rotate: -0.4deg; }
+    85% { rotate: 0.9deg; }
+    100% { rotate: 0deg; }
+  }
+
+  @keyframes burst-left {
+    to {
+      opacity: 0;
+      filter: blur(6px);
+      translate: -60vw -35vh;
+      rotate: -140deg;
+      scale: 1.8;
+    }
+  }
+
+  @keyframes burst-up {
+    to {
+      opacity: 0;
+      filter: blur(6px);
+      translate: 8vw -80vh;
+      rotate: 220deg;
+      scale: 2.2;
+    }
+  }
+
+  @keyframes burst-right {
+    to {
+      opacity: 0;
+      filter: blur(6px);
+      translate: 55vw 40vh;
+      rotate: 160deg;
+      scale: 1.6;
+    }
+  }
+
+  @keyframes draw {
+    from {
+      stroke-dashoffset: 2400;
+    }
+  }
+
+  @keyframes drift {
+    to {
+      transform: translate(-24px, 16px) rotate(1deg);
+    }
+  }
+
+  @keyframes sway {
+    from {
+      transform: rotateX(8deg) rotateY(-12deg);
+    }
+    to {
+      transform: rotateX(-4deg) rotateY(12deg);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(0.35em) rotateX(-60deg);
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
+</style>
